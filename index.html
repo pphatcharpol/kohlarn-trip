@@ -3,294 +3,438 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🌴 ทริปหนีบอสไปเกาะล้าน 🌊</title>
+    <title>🌴 ทริปหนีบอสไปเกาะล้าน V.2 🌊</title>
     <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- SortableJS สำหรับลากวาง -->
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+    <!-- GSAP สำหรับแอนิเมชัน Scroll -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
     <style>
-        /* CSS ตัวแปรสำหรับ Liquid Glass */
         :root {
-            --glass-bg: rgba(255, 255, 255, 0.25);
-            --glass-border: rgba(255, 255, 255, 0.5);
-            --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
+            --glass-bg: rgba(255, 255, 255, 0.4);
+            --glass-border: rgba(255, 255, 255, 0.6);
+            --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
             --text-color: #1d1d1f;
+            --primary: #ff2a85;
+            --secondary: #23d5ab;
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Prompt', sans-serif;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Prompt', sans-serif; }
+        
         body {
-            background-color: #f5f5f7;
+            background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%);
             color: var(--text-color);
             overflow-x: hidden;
-            position: relative;
             min-height: 100vh;
         }
 
-        /* Animated Liquid Background */
-        .blob {
-            position: absolute;
-            filter: blur(80px);
-            z-index: -1;
-            opacity: 0.7;
-            animation: moveBlobs 15s infinite alternate;
-        }
-        .blob-1 { top: -10%; left: -10%; width: 500px; height: 500px; background: #ff2a85; }
-        .blob-2 { bottom: -10%; right: -10%; width: 600px; height: 600px; background: #8a2387; animation-delay: -5s; }
-        .blob-3 { top: 40%; left: 40%; width: 400px; height: 400px; background: #23d5ab; animation-delay: -10s; }
-
-        @keyframes moveBlobs {
-            0% { transform: translate(0, 0) scale(1); }
-            100% { transform: translate(50px, 100px) scale(1.2); }
-        }
-
-        /* Layout Container */
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 40px 20px;
-        }
-
-        /* Glassmorphism Card */
-        .glass-card {
-            background: var(--glass-bg);
+        /* เมนูด้านข้าง (Sidebar) */
+        .sidebar {
+            position: fixed;
+            top: 0; right: -300px;
+            width: 250px; height: 100vh;
+            background: rgba(255, 255, 255, 0.8);
             backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border);
-            border-radius: 30px;
-            padding: 30px;
-            margin-bottom: 30px;
-            box-shadow: var(--glass-shadow);
-            transition: transform 0.3s ease;
+            box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+            transition: 0.4s ease;
+            z-index: 1000;
+            padding: 80px 20px;
+        }
+        .sidebar.active { right: 0; }
+        .sidebar a {
+            display: block; padding: 15px; margin-bottom: 10px;
+            text-decoration: none; color: #333; font-weight: 600;
+            border-radius: 10px; transition: 0.3s;
+        }
+        .sidebar a:hover { background: var(--glass-bg); padding-left: 25px; color: var(--primary); }
+
+        .menu-btn {
+            position: fixed; top: 20px; right: 20px;
+            background: white; border: none; border-radius: 50%;
+            width: 50px; height: 50px; font-size: 24px;
+            box-shadow: var(--glass-shadow); cursor: pointer; z-index: 1001;
+            transition: 0.3s;
+        }
+        .menu-btn:hover { transform: scale(1.1); }
+
+        /* Container & Glass Card */
+        .container { max-width: 900px; margin: 0 auto; padding: 80px 20px; }
+        .glass-card {
+            background: var(--glass-bg); backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border); border-radius: 25px;
+            padding: 30px; margin-bottom: 40px; box-shadow: var(--glass-shadow);
+        }
+        h1, h2 { text-align: center; margin-bottom: 20px; color: #333; }
+
+        /* Scroll Animations Classes */
+        .hidden-left { opacity: 0; transform: translateX(-100px); transition: 0.8s ease; }
+        .hidden-right { opacity: 0; transform: translateX(100px); transition: 0.8s ease; }
+        .hidden-up { opacity: 0; transform: translateY(100px); transition: 0.8s ease; }
+        .show { opacity: 1; transform: translate(0, 0); }
+
+        /* สมาชิก CRUD */
+        .member-list { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; }
+        .member-tag {
+            background: white; padding: 8px 15px; border-radius: 20px;
+            display: flex; align-items: center; gap: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            animation: popIn 0.3s ease;
+        }
+        .member-tag button { background: none; border: none; color: red; cursor: pointer; }
+        .input-group { display: flex; gap: 10px; }
+        .input-group input { flex: 1; padding: 10px 15px; border-radius: 15px; border: none; outline: none; }
+        .input-group button { padding: 10px 20px; border: none; border-radius: 15px; background: var(--primary); color: white; cursor: pointer; }
+
+        /* Drag & Drop ที่นั่งรถ */
+        .drag-container { display: flex; gap: 20px; flex-wrap: wrap; }
+        .pool-area, .car-area {
+            flex: 1; min-width: 250px; background: rgba(255,255,255,0.5);
+            border-radius: 15px; padding: 15px; border: 2px dashed #aaa;
+        }
+        .car-area { border-color: var(--secondary); background: rgba(35, 213, 171, 0.1); }
+        .drag-item {
+            background: white; padding: 10px; margin-bottom: 10px;
+            border-radius: 10px; cursor: grab; text-align: center; font-weight: 600;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .drag-item:active { cursor: grabbing; }
+
+        /* Vertical Route Animation */
+        .route-wrapper { position: relative; padding-left: 50px; margin-top: 40px; }
+        .route-line {
+            position: absolute; left: 20px; top: 0; bottom: 0;
+            width: 4px; background: rgba(255,255,255,0.8); border-radius: 2px;
+        }
+        .car-icon-vertical {
+            position: absolute; left: -3px; top: 0;
+            font-size: 30px; z-index: 10;
+        }
+        .route-stop {
+            position: relative; margin-bottom: 80px; padding: 20px;
+            background: white; border-radius: 15px; box-shadow: var(--glass-shadow);
+        }
+        .route-stop::before {
+            content: ''; position: absolute; left: -36px; top: 25px;
+            width: 16px; height: 16px; background: var(--primary); border-radius: 50%;
         }
 
-        .glass-card:hover {
-            transform: translateY(-5px);
+        /* Horizontal Itinerary */
+        .horizontal-scroll-wrapper {
+            position: relative; padding-top: 40px;
+            overflow-x: auto; display: flex; gap: 20px; padding-bottom: 20px;
+            scroll-behavior: smooth;
+        }
+        .horizontal-scroll-wrapper::-webkit-scrollbar { height: 8px; }
+        .horizontal-scroll-wrapper::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 4px; }
+        
+        .walker-icon {
+            position: absolute; top: 0; left: 0; font-size: 35px;
+            transition: left 0.1s ease; z-index: 10;
+        }
+        .activity-card {
+            min-width: 220px; background: white; padding: 20px;
+            border-radius: 15px; text-align: center; box-shadow: var(--glass-shadow);
+            position: relative;
+        }
+        .cost-badge {
+            background: #ffeaa7; color: #d63031; padding: 5px 10px;
+            border-radius: 10px; font-weight: bold; margin-top: 10px; display: inline-block;
         }
 
-        h1, h2 {
-            text-align: center;
-            margin-bottom: 20px;
-            font-weight: 700;
-        }
-
-        h1 {
-            font-size: 2.5em;
-            background: -webkit-linear-gradient(45deg, #ff2a85, #8a2387);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        /* Lists & Tables */
-        ul { list-style: none; }
-        li {
-            padding: 10px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.3);
-            display: flex;
-            justify-content: space-between;
-        }
-        li:last-child { border-bottom: none; }
-
-        /* Timeline */
-        .timeline-item {
-            display: flex;
-            margin-bottom: 15px;
-            background: rgba(255,255,255,0.4);
-            padding: 15px;
-            border-radius: 20px;
-        }
-        .time { font-weight: 600; width: 80px; color: #8a2387; }
-        .activity { flex: 1; }
-
-        /* Input fields for editing costs */
-        input[type="number"] {
-            width: 100px;
-            padding: 8px;
-            border-radius: 12px;
-            border: 1px solid rgba(255,255,255,0.5);
-            background: rgba(255,255,255,0.6);
-            text-align: right;
-            font-family: inherit;
-        }
-
+        /* Summary */
         .total-box {
-            background: linear-gradient(135deg, #23d5ab, #23a6d5);
-            color: white;
-            text-align: center;
-            padding: 20px;
-            border-radius: 25px;
-            font-size: 1.5em;
-            font-weight: bold;
-            margin-top: 20px;
-            box-shadow: 0 10px 20px rgba(35, 213, 171, 0.3);
+            background: linear-gradient(135deg, var(--primary), #ff7e5f);
+            color: white; text-align: center; padding: 30px; border-radius: 25px;
+            font-size: 2em; font-weight: bold; box-shadow: 0 10px 20px rgba(255, 42, 133, 0.3);
         }
 
-        /* Responsive */
-        @media (max-width: 600px) {
-            h1 { font-size: 2em; }
-            .timeline-item { flex-direction: column; }
-            .time { margin-bottom: 5px; }
-        }
+        @keyframes popIn { 0% { transform: scale(0); } 100% { transform: scale(1); } }
     </style>
 </head>
 <body>
 
-    <!-- Liquid Background Elements -->
-    <div class="blob blob-1"></div>
-    <div class="blob blob-2"></div>
-    <div class="blob blob-3"></div>
+    <!-- ปุ่มเมนู & Sidebar -->
+    <button class="menu-btn" onclick="toggleMenu()">☰</button>
+    <div class="sidebar" id="sidebar">
+        <a href="#section-members" onclick="toggleMenu()">🧑‍🤝‍🧑 จัดการสมาชิก</a>
+        <a href="#section-cars" onclick="toggleMenu()">🚗 จัดที่นั่งรถ</a>
+        <a href="#section-route" onclick="toggleMenu()">🗺️ เส้นทางเดินทาง</a>
+        <a href="#section-itinerary" onclick="toggleMenu()">📅 แผนการเที่ยว</a>
+        <a href="#section-summary" onclick="toggleMenu()">💸 สรุปค่าใช้จ่าย</a>
+    </div>
 
     <div class="container">
         
         <!-- Header -->
-        <div class="glass-card">
-            <h1>🌴 ทริปหนีบอสไปเกาะล้าน 🌊</h1>
-            <p style="text-align: center;">พิษณุโลก ➔ เกาะล้าน (3 วัน 2 คืน)</p>
+        <div class="glass-card hidden-up">
+            <h1 style="font-size: 3em;">🌊 เกาะล้าน V.2</h1>
+            <p style="text-align: center; font-size: 1.2em;">ทริปหนีบอสสุดพรีเมียม (แก้ไขข้อมูลได้)</p>
         </div>
 
-        <!-- แก๊งค์ลูกหมู (Members) -->
-        <div class="glass-card">
-            <h2>🧑‍🤝‍🧑 สมาชิกผู้ร่วมชะตากรรม (<span id="member-count">0</span> คน)</h2>
-            <ul id="member-list">
-                <!-- ข้อมูลจะถูกดึงมาจาก JavaScript -->
-            </ul>
+        <!-- Section 1: สมาชิก (CRUD) -->
+        <div id="section-members" class="glass-card hidden-left">
+            <h2>🧑‍🤝‍🧑 สมาชิก (<span id="member-count">0</span> คน)</h2>
+            <div class="member-list" id="member-list"></div>
+            <div class="input-group">
+                <input type="text" id="new-member-name" placeholder="ชื่อสมาชิกใหม่...">
+                <button onclick="addMember()">+ เพิ่มคน</button>
+            </div>
+            <p style="font-size: 0.8em; color: red; margin-top: 10px;">*หากลบ/เพิ่มคน ระบบที่นั่งรถจะถูกรีเซ็ตกลับไปจุดเริ่มต้น</p>
         </div>
 
-        <!-- รูทการเดินทาง & ที่นั่งรถ -->
-        <div class="glass-card">
-            <h2>🚗 การเดินทาง & ที่นั่ง</h2>
-            <p><strong>เส้นทาง:</strong> ออกจากพิษณุโลก ➔ นครสวรรค์ ➔ อยุธยา ➔ มอเตอร์เวย์ ➔ ท่าเรือแหลมบาลีฮาย พัทยา</p>
-            <br>
-            <ul id="car-seating">
-                <!-- ข้อมูลจะถูกดึงมาจาก JavaScript -->
-            </ul>
-        </div>
-
-        <!-- แผนการเดินทาง (Itinerary) -->
-        <div class="glass-card">
-            <h2>📅 แผนการเดินทาง</h2>
-            <div id="itinerary-list">
-                <!-- ข้อมูลจะถูกดึงมาจาก JavaScript -->
+        <!-- Section 2: ลากวางที่นั่ง -->
+        <div id="section-cars" class="glass-card hidden-right">
+            <h2>🚗 จัดที่นั่ง (ลากและวาง)</h2>
+            <div class="drag-container">
+                <div class="pool-area">
+                    <h3 style="text-align:center; font-size: 1em;">📍 จุดพักคอย (ลากชื่อจากที่นี่)</h3>
+                    <div id="drag-pool" style="min-height: 100px; padding: 10px;"></div>
+                </div>
+                <div class="car-area">
+                    <h3 style="text-align:center; font-size: 1em;">🚐 รถตู้ (8 ที่นั่ง)</h3>
+                    <div id="car-van" style="min-height: 100px; padding: 10px;"></div>
+                </div>
+                <div class="car-area">
+                    <h3 style="text-align:center; font-size: 1em;">🚙 รถเก๋ง (4 ที่นั่ง)</h3>
+                    <div id="car-sedan" style="min-height: 100px; padding: 10px;"></div>
+                </div>
             </div>
         </div>
 
-        <!-- สรุปค่าใช้จ่าย -->
-        <div class="glass-card">
-            <h2>💸 ค่าใช้จ่าย (กองกลาง)</h2>
-            <p style="text-align:center; font-size: 0.9em; margin-bottom: 15px;">*สามารถแก้ไขตัวเลขในช่องเพื่อคำนวณใหม่ได้ทันที</p>
-            <ul id="expense-list">
-                <!-- ข้อมูลจะถูกดึงมาจาก JavaScript -->
+        <!-- Section 3: รูทเดินทางแนวตั้ง (GSAP Animation) -->
+        <div id="section-route" class="glass-card hidden-left" style="overflow: hidden;">
+            <h2>🗺️ เส้นทางการขับรถ</h2>
+            <div class="route-wrapper" id="route-wrapper">
+                <div class="route-line"></div>
+                <div class="car-icon-vertical" id="animated-car">🚘</div>
+                
+                <div class="route-stop">
+                    <h3>📍 พิษณุโลก (จุดรวมพล)</h3>
+                    <p>เตรียมของขึ้นรถ เช็คจำนวนคน</p>
+                </div>
+                <div class="route-stop">
+                    <h3>📍 นครสวรรค์</h3>
+                    <p>แวะพักรถ เข้าห้องน้ำ ซื้อกาแฟ</p>
+                </div>
+                <div class="route-stop">
+                    <h3>📍 อยุธยา</h3>
+                    <p>แวะกินข้าวต้มรอบดึก</p>
+                </div>
+                <div class="route-stop">
+                    <h3>📍 มอเตอร์เวย์ (ชลบุรี)</h3>
+                    <p>ยิงยาว แวะจ่ายค่าทางด่วน</p>
+                </div>
+                <div class="route-stop" style="margin-bottom: 0;">
+                    <h3>📍 ท่าเรือแหลมบาลีฮาย (พัทยา)</h3>
+                    <p>ถึงที่หมาย ฝากรถ เตรียมขึ้นเรือ!</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 4: แพลนเที่ยวแนวนอน -->
+        <div id="section-itinerary" class="glass-card hidden-right">
+            <h2>📅 กิจกรรม & ค่าใช้จ่าย</h2>
+            <p style="text-align:center; font-size: 0.9em;">(เลื่อนซ้าย-ขวาเพื่อดูแพลน)</p>
+            <div class="horizontal-scroll-wrapper" id="h-scroll" onscroll="moveWalker()">
+                <div class="walker-icon" id="walker">🏃‍♂️💨</div>
+                <!-- ข้อมูลจะถูกสร้างจาก JS -->
+            </div>
+        </div>
+
+        <!-- Section 5: สรุปค่าใช้จ่าย -->
+        <div id="section-summary" class="glass-card hidden-up">
+            <h2>💸 สรุปหารค่าใช้จ่าย</h2>
+            <ul style="list-style: none; padding-bottom: 20px;" id="expense-summary-list">
+                <!-- ข้อมูลบิลสรุป -->
             </ul>
             <div class="total-box">
-                รวมหารเฉลี่ยคนละ: <span id="cost-per-person">0</span> บาท
+                คนละ <span id="per-person-cost">0</span> ฿
             </div>
         </div>
 
     </div>
 
-    <!-- JavaScript สำหรับจัดการข้อมูล -->
     <script>
         // ==========================================
-        // 🛠️ ส่วนนี้คุณสามารถแก้ไขข้อมูลได้ตามใจชอบเลยครับ
+        // 🛠️ ข้อมูลตั้งต้น (State Management)
         // ==========================================
-
-        const TRIP_DATA = {
-            members: ["มายด์", "แพร", "ตั้ม", "บอส (แอบมา)"],
-            
-            cars: [
-                { role: "คนขับ 🏎️", name: "ตั้ม" },
-                { role: "คนนำทาง (หลับ) 😴", name: "แพร" },
-                { role: "เปิดเพลง/ชงเหล้า 🎧", name: "มายด์" },
-                { role: "เบาะหลัง ภาระ 🎒", name: "บอส" }
-            ],
-
-            itinerary: [
-                { day: "Day 1: ออกเดินทาง", time: "22:00", act: "รวมตัวที่โลตัส พิษณุโลก แพ็คของขึ้นรถ" },
-                { day: "Day 1", time: "23:00", act: "ล้อหมุน มุ่งหน้าสู่พัทยา" },
-                { day: "Day 2: ทะเลเดือด", time: "06:00", act: "ถึงท่าเรือแหลมบาลีฮาย ฝากรถ แวะกินข้าวเช้า" },
-                { day: "Day 2", time: "07:30", act: "ขึ้นเรือสปีดโบ๊ท ข้ามไปเกาะล้าน" },
-                { day: "Day 2", time: "14:00", act: "เช็คอินเข้าที่พัก พักผ่อน" },
-                { day: "Day 2", time: "17:00", act: "ขี่มอไซค์ไปคาเฟ่ หาดตาแหวน" },
-                { day: "Day 2", time: "19:00", act: "ปาร์ตี้อาหารทะเลริมหาด 🦐🦑" },
-                { day: "Day 3: กลับสู่โลกความจริง", time: "10:00", act: "ตื่นนอน เก็บของ (ใครไหวไปดำน้ำ)" },
-                { day: "Day 3", time: "12:00", act: "เช็คเอาท์ นั่งเรือกลับพัทยา" },
-                { day: "Day 3", time: "21:00", act: "ถึงพิษณุโลกโดยสวัสดิภาพ" }
-            ],
-
-            // ใส่ตัวเลขค่าใช้จ่าย 'รวม' ทั้งหมด (เดี๋ยวระบบหารให้เอง)
-            expenses: [
-                { id: "gas", name: "ค่าน้ำมันรถ (ไป-กลับ)", cost: 3000 },
-                { id: "toll", name: "ค่าทางด่วน/มอเตอร์เวย์", cost: 500 },
-                { id: "boat", name: "ค่าเรือสปีดโบ๊ท (เหมา)", cost: 2500 },
-                { id: "hotel", name: "ค่าที่พัก (2 คืน)", cost: 4000 },
-                { id: "food", name: "กองกลางค่ากิน", cost: 5000 }
+        let state = {
+            members: ["บิว", "ต้นหอม", "เบส", "ที", "ฟิว", "เฟิร์ส", "แอ็ค", "แฟน (บิว)", "แฟน (ต้นหอม)", "แฟน (เบส)"],
+            activities: [
+                { id: 1, name: "ค่าน้ำมันรถ (ไป-กลับ)", cost: 4000, icon: "⛽" },
+                { id: 2, name: "ค่าทางด่วน", cost: 500, icon: "🛣️" },
+                { id: 3, name: "เรือสปีดโบ๊ทเหมา", cost: 2500, icon: "🚤" },
+                { id: 4, name: "ค่าที่พัก 2 คืน", cost: 8000, icon: "🏨" },
+                { id: 5, name: "กองกลางค่ากิน", cost: 6000, icon: "🍻" },
+                { id: 6, name: "เช่ามอเตอร์ไซค์", cost: 1500, icon: "🛵" },
+                { id: 7, name: "คาเฟ่ตาแหวน", cost: 1000, icon: "☕" }
             ]
         };
 
         // ==========================================
-        // ⚙️ ระบบหลังบ้าน (ไม่ต้องแก้ตรงนี้ครับ)
+        // 1. ระบบ Sidebar & Scroll Reveal
         // ==========================================
+        function toggleMenu() {
+            document.getElementById('sidebar').classList.toggle('active');
+        }
 
-        function renderData() {
-            // Render Members
-            document.getElementById('member-count').innerText = TRIP_DATA.members.length;
-            const memberUl = document.getElementById('member-list');
-            TRIP_DATA.members.forEach(member => {
-                memberUl.innerHTML += `<li><span>👤 ${member}</span></li>`;
+        // ทำให้ Elements ค่อยๆ ปรากฏตอนเลื่อนจอ
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if(entry.isIntersecting) {
+                    entry.target.classList.add('show');
+                }
             });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.hidden-left, .hidden-right, .hidden-up').forEach(el => observer.observe(el));
 
-            // Render Car
-            const carUl = document.getElementById('car-seating');
-            TRIP_DATA.cars.forEach(seat => {
-                carUl.innerHTML += `<li><span>${seat.role}</span> <strong>${seat.name}</strong></li>`;
-            });
-
-            // Render Itinerary
-            const itinDiv = document.getElementById('itinerary-list');
-            TRIP_DATA.itinerary.forEach(item => {
-                itinDiv.innerHTML += `
-                    <div class="timeline-item">
-                        <div class="time">${item.time}</div>
-                        <div class="activity">
-                            <small style="color:#666;">${item.day}</small><br>
-                            ${item.act}
-                        </div>
+        // ==========================================
+        // 2. ระบบ Members CRUD
+        // ==========================================
+        function renderMembers() {
+            const list = document.getElementById('member-list');
+            list.innerHTML = '';
+            document.getElementById('member-count').innerText = state.members.length;
+            
+            state.members.forEach((member, index) => {
+                list.innerHTML += `
+                    <div class="member-tag">
+                        👤 ${member} 
+                        <button onclick="removeMember(${index})">✖</button>
                     </div>`;
             });
 
-            // Render Expenses
-            const expenseUl = document.getElementById('expense-list');
-            TRIP_DATA.expenses.forEach(exp => {
-                expenseUl.innerHTML += `
-                    <li>
-                        <span>${exp.name}</span>
-                        <div>
-                            <input type="number" id="${exp.id}" value="${exp.cost}" onchange="calculateTotal()"> ฿
-                        </div>
+            renderDragDrop(); // อัปเดตรายชื่อในจุดพักคอย
+            calculateTotal(); // คำนวณเงินใหม่
+        }
+
+        function addMember() {
+            const input = document.getElementById('new-member-name');
+            if(input.value.trim() !== '') {
+                state.members.push(input.value.trim());
+                input.value = '';
+                renderMembers();
+            }
+        }
+
+        function removeMember(index) {
+            state.members.splice(index, 1);
+            renderMembers();
+        }
+
+        // ==========================================
+        // 3. ระบบ Drag & Drop ด้วย SortableJS
+        // ==========================================
+        let sortables = [];
+        function renderDragDrop() {
+            const pool = document.getElementById('drag-pool');
+            const van = document.getElementById('car-van');
+            const sedan = document.getElementById('car-sedan');
+            
+            // เคลียร์ค่าทั้งหมดให้กลับมาเริ่มต้น
+            pool.innerHTML = ''; van.innerHTML = ''; sedan.innerHTML = '';
+            
+            // ใส่ชื่อทุกคนใน pool
+            state.members.forEach(member => {
+                pool.innerHTML += `<div class="drag-item">${member}</div>`;
+            });
+
+            // ป้องกันการประกาศ Sortable ซ้ำ
+            if(sortables.length === 0) {
+                sortables.push(new Sortable(pool, { group: 'shared', animation: 150 }));
+                sortables.push(new Sortable(van, { group: 'shared', animation: 150 }));
+                sortables.push(new Sortable(sedan, { group: 'shared', animation: 150 }));
+            }
+        }
+
+        // ==========================================
+        // 4. แอนิเมชันรูทขับรถแนวตั้ง (GSAP)
+        // ==========================================
+        gsap.registerPlugin(ScrollTrigger);
+        
+        // รอให้ DOM โหลดเสร็จก่อนผูกแอนิเมชัน
+        setTimeout(() => {
+            gsap.to("#animated-car", {
+                scrollTrigger: {
+                    trigger: "#route-wrapper",
+                    start: "top center", // เริ่มเมื่อขอบบนของ route อยู่กลางจอ
+                    end: "bottom center", // จบเมื่อขอบล่างของ route อยู่กลางจอ
+                    scrub: 1 // ลิงก์กับการเลื่อนเมาส์
+                },
+                top: "100%", // วิ่งลงไปล่างสุด
+                ease: "none"
+            });
+        }, 500);
+
+        // ==========================================
+        // 5. รูทแพลนแนวนอน (Horizontal) & ไอคอนเดิน
+        // ==========================================
+        function renderActivities() {
+            const container = document.getElementById('h-scroll');
+            let html = `<div class="walker-icon" id="walker">🏃‍♂️💨</div>`;
+            
+            state.activities.forEach(act => {
+                html += `
+                    <div class="activity-card">
+                        <div style="font-size: 2em; margin-bottom: 10px;">${act.icon}</div>
+                        <h4>${act.name}</h4>
+                        <div class="cost-badge">${act.cost.toLocaleString()} ฿</div>
+                    </div>`;
+            });
+            container.innerHTML = html;
+        }
+
+        function moveWalker() {
+            const container = document.getElementById('h-scroll');
+            const walker = document.getElementById('walker');
+            
+            // คำนวณเปอร์เซ็นต์การเลื่อน (0 ถึง 1)
+            const scrollPercentage = container.scrollLeft / (container.scrollWidth - container.clientWidth);
+            
+            // เลื่อนไอคอนตามเปอร์เซ็นต์
+            const maxLeft = container.clientWidth - 40; // 40 คือความกว้างไอคอนคร่าวๆ
+            walker.style.left = (container.scrollLeft + (scrollPercentage * maxLeft)) + 'px';
+        }
+
+        // ==========================================
+        // 6. ระบบคำนวณค่าใช้จ่าย
+        // ==========================================
+        function calculateTotal() {
+            const list = document.getElementById('expense-summary-list');
+            list.innerHTML = '';
+            
+            let totalSum = 0;
+            state.activities.forEach(act => {
+                totalSum += act.cost;
+                list.innerHTML += `
+                    <li style="display:flex; justify-content:space-between; padding: 10px 0; border-bottom: 1px solid rgba(0,0,0,0.1);">
+                        <span>${act.icon} ${act.name}</span>
+                        <strong>${act.cost.toLocaleString()} ฿</strong>
                     </li>`;
             });
 
-            calculateTotal();
+            // เพิ่มบรรทัดรวม
+            list.innerHTML += `
+                <li style="display:flex; justify-content:space-between; padding: 15px 0; font-size: 1.2em; font-weight: bold;">
+                    <span>รวมค่าใช้จ่ายทั้งหมด</span>
+                    <span style="color: var(--primary);">${totalSum.toLocaleString()} ฿</span>
+                </li>`;
+
+            // หารจำนวนคน
+            const perPerson = totalSum / state.members.length;
+            document.getElementById('per-person-cost').innerText = perPerson.toLocaleString('th-TH', { maximumFractionDigits: 0 });
         }
 
-        // ฟังก์ชันคำนวณเงินหารเฉลี่ย
-        function calculateTotal() {
-            let total = 0;
-            TRIP_DATA.expenses.forEach(exp => {
-                const val = parseFloat(document.getElementById(exp.id).value) || 0;
-                total += val;
-            });
-            const perPerson = total / TRIP_DATA.members.length;
-            
-            // ใส่คอมม่าให้ตัวเลขดูอ่านง่าย
-            document.getElementById('cost-per-person').innerText = 
-                perPerson.toLocaleString('th-TH', { maximumFractionDigits: 0 });
-        }
+        // ==========================================
+        // เริ่มต้นการทำงาน
+        // ==========================================
+        window.onload = () => {
+            renderMembers();
+            renderActivities();
+        };
 
-        // โหลดข้อมูลเมื่อเปิดเว็บ
-        window.onload = renderData;
     </script>
 </body>
 </html>
