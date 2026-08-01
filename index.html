@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌴 ทริปหนีบอสไปเกาะล้าน 🌊</title>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* CSS ตัวแปรสำหรับ Liquid Glass */
+        :root {
+            --glass-bg: rgba(255, 255, 255, 0.25);
+            --glass-border: rgba(255, 255, 255, 0.5);
+            --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
+            --text-color: #1d1d1f;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Prompt', sans-serif;
+        }
+
+        body {
+            background-color: #f5f5f7;
+            color: var(--text-color);
+            overflow-x: hidden;
+            position: relative;
+            min-height: 100vh;
+        }
+
+        /* Animated Liquid Background */
+        .blob {
+            position: absolute;
+            filter: blur(80px);
+            z-index: -1;
+            opacity: 0.7;
+            animation: moveBlobs 15s infinite alternate;
+        }
+        .blob-1 { top: -10%; left: -10%; width: 500px; height: 500px; background: #ff2a85; }
+        .blob-2 { bottom: -10%; right: -10%; width: 600px; height: 600px; background: #8a2387; animation-delay: -5s; }
+        .blob-3 { top: 40%; left: 40%; width: 400px; height: 400px; background: #23d5ab; animation-delay: -10s; }
+
+        @keyframes moveBlobs {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(50px, 100px) scale(1.2); }
+        }
+
+        /* Layout Container */
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* Glassmorphism Card */
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 30px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: var(--glass-shadow);
+            transition: transform 0.3s ease;
+        }
+
+        .glass-card:hover {
+            transform: translateY(-5px);
+        }
+
+        h1, h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            background: -webkit-linear-gradient(45deg, #ff2a85, #8a2387);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Lists & Tables */
+        ul { list-style: none; }
+        li {
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.3);
+            display: flex;
+            justify-content: space-between;
+        }
+        li:last-child { border-bottom: none; }
+
+        /* Timeline */
+        .timeline-item {
+            display: flex;
+            margin-bottom: 15px;
+            background: rgba(255,255,255,0.4);
+            padding: 15px;
+            border-radius: 20px;
+        }
+        .time { font-weight: 600; width: 80px; color: #8a2387; }
+        .activity { flex: 1; }
+
+        /* Input fields for editing costs */
+        input[type="number"] {
+            width: 100px;
+            padding: 8px;
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.5);
+            background: rgba(255,255,255,0.6);
+            text-align: right;
+            font-family: inherit;
+        }
+
+        .total-box {
+            background: linear-gradient(135deg, #23d5ab, #23a6d5);
+            color: white;
+            text-align: center;
+            padding: 20px;
+            border-radius: 25px;
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-top: 20px;
+            box-shadow: 0 10px 20px rgba(35, 213, 171, 0.3);
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            h1 { font-size: 2em; }
+            .timeline-item { flex-direction: column; }
+            .time { margin-bottom: 5px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Liquid Background Elements -->
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+
+    <div class="container">
+        
+        <!-- Header -->
+        <div class="glass-card">
+            <h1>🌴 ทริปหนีบอสไปเกาะล้าน 🌊</h1>
+            <p style="text-align: center;">พิษณุโลก ➔ เกาะล้าน (3 วัน 2 คืน)</p>
+        </div>
+
+        <!-- แก๊งค์ลูกหมู (Members) -->
+        <div class="glass-card">
+            <h2>🧑‍🤝‍🧑 สมาชิกผู้ร่วมชะตากรรม (<span id="member-count">0</span> คน)</h2>
+            <ul id="member-list">
+                <!-- ข้อมูลจะถูกดึงมาจาก JavaScript -->
+            </ul>
+        </div>
+
+        <!-- รูทการเดินทาง & ที่นั่งรถ -->
+        <div class="glass-card">
+            <h2>🚗 การเดินทาง & ที่นั่ง</h2>
+            <p><strong>เส้นทาง:</strong> ออกจากพิษณุโลก ➔ นครสวรรค์ ➔ อยุธยา ➔ มอเตอร์เวย์ ➔ ท่าเรือแหลมบาลีฮาย พัทยา</p>
+            <br>
+            <ul id="car-seating">
+                <!-- ข้อมูลจะถูกดึงมาจาก JavaScript -->
+            </ul>
+        </div>
+
+        <!-- แผนการเดินทาง (Itinerary) -->
+        <div class="glass-card">
+            <h2>📅 แผนการเดินทาง</h2>
+            <div id="itinerary-list">
+                <!-- ข้อมูลจะถูกดึงมาจาก JavaScript -->
+            </div>
+        </div>
+
+        <!-- สรุปค่าใช้จ่าย -->
+        <div class="glass-card">
+            <h2>💸 ค่าใช้จ่าย (กองกลาง)</h2>
+            <p style="text-align:center; font-size: 0.9em; margin-bottom: 15px;">*สามารถแก้ไขตัวเลขในช่องเพื่อคำนวณใหม่ได้ทันที</p>
+            <ul id="expense-list">
+                <!-- ข้อมูลจะถูกดึงมาจาก JavaScript -->
+            </ul>
+            <div class="total-box">
+                รวมหารเฉลี่ยคนละ: <span id="cost-per-person">0</span> บาท
+            </div>
+        </div>
+
+    </div>
+
+    <!-- JavaScript สำหรับจัดการข้อมูล -->
+    <script>
+        // ==========================================
+        // 🛠️ ส่วนนี้คุณสามารถแก้ไขข้อมูลได้ตามใจชอบเลยครับ
+        // ==========================================
+
+        const TRIP_DATA = {
+            members: ["มายด์", "แพร", "ตั้ม", "บอส (แอบมา)"],
+            
+            cars: [
+                { role: "คนขับ 🏎️", name: "ตั้ม" },
+                { role: "คนนำทาง (หลับ) 😴", name: "แพร" },
+                { role: "เปิดเพลง/ชงเหล้า 🎧", name: "มายด์" },
+                { role: "เบาะหลัง ภาระ 🎒", name: "บอส" }
+            ],
+
+            itinerary: [
+                { day: "Day 1: ออกเดินทาง", time: "22:00", act: "รวมตัวที่โลตัส พิษณุโลก แพ็คของขึ้นรถ" },
+                { day: "Day 1", time: "23:00", act: "ล้อหมุน มุ่งหน้าสู่พัทยา" },
+                { day: "Day 2: ทะเลเดือด", time: "06:00", act: "ถึงท่าเรือแหลมบาลีฮาย ฝากรถ แวะกินข้าวเช้า" },
+                { day: "Day 2", time: "07:30", act: "ขึ้นเรือสปีดโบ๊ท ข้ามไปเกาะล้าน" },
+                { day: "Day 2", time: "14:00", act: "เช็คอินเข้าที่พัก พักผ่อน" },
+                { day: "Day 2", time: "17:00", act: "ขี่มอไซค์ไปคาเฟ่ หาดตาแหวน" },
+                { day: "Day 2", time: "19:00", act: "ปาร์ตี้อาหารทะเลริมหาด 🦐🦑" },
+                { day: "Day 3: กลับสู่โลกความจริง", time: "10:00", act: "ตื่นนอน เก็บของ (ใครไหวไปดำน้ำ)" },
+                { day: "Day 3", time: "12:00", act: "เช็คเอาท์ นั่งเรือกลับพัทยา" },
+                { day: "Day 3", time: "21:00", act: "ถึงพิษณุโลกโดยสวัสดิภาพ" }
+            ],
+
+            // ใส่ตัวเลขค่าใช้จ่าย 'รวม' ทั้งหมด (เดี๋ยวระบบหารให้เอง)
+            expenses: [
+                { id: "gas", name: "ค่าน้ำมันรถ (ไป-กลับ)", cost: 3000 },
+                { id: "toll", name: "ค่าทางด่วน/มอเตอร์เวย์", cost: 500 },
+                { id: "boat", name: "ค่าเรือสปีดโบ๊ท (เหมา)", cost: 2500 },
+                { id: "hotel", name: "ค่าที่พัก (2 คืน)", cost: 4000 },
+                { id: "food", name: "กองกลางค่ากิน", cost: 5000 }
+            ]
+        };
+
+        // ==========================================
+        // ⚙️ ระบบหลังบ้าน (ไม่ต้องแก้ตรงนี้ครับ)
+        // ==========================================
+
+        function renderData() {
+            // Render Members
+            document.getElementById('member-count').innerText = TRIP_DATA.members.length;
+            const memberUl = document.getElementById('member-list');
+            TRIP_DATA.members.forEach(member => {
+                memberUl.innerHTML += `<li><span>👤 ${member}</span></li>`;
+            });
+
+            // Render Car
+            const carUl = document.getElementById('car-seating');
+            TRIP_DATA.cars.forEach(seat => {
+                carUl.innerHTML += `<li><span>${seat.role}</span> <strong>${seat.name}</strong></li>`;
+            });
+
+            // Render Itinerary
+            const itinDiv = document.getElementById('itinerary-list');
+            TRIP_DATA.itinerary.forEach(item => {
+                itinDiv.innerHTML += `
+                    <div class="timeline-item">
+                        <div class="time">${item.time}</div>
+                        <div class="activity">
+                            <small style="color:#666;">${item.day}</small><br>
+                            ${item.act}
+                        </div>
+                    </div>`;
+            });
+
+            // Render Expenses
+            const expenseUl = document.getElementById('expense-list');
+            TRIP_DATA.expenses.forEach(exp => {
+                expenseUl.innerHTML += `
+                    <li>
+                        <span>${exp.name}</span>
+                        <div>
+                            <input type="number" id="${exp.id}" value="${exp.cost}" onchange="calculateTotal()"> ฿
+                        </div>
+                    </li>`;
+            });
+
+            calculateTotal();
+        }
+
+        // ฟังก์ชันคำนวณเงินหารเฉลี่ย
+        function calculateTotal() {
+            let total = 0;
+            TRIP_DATA.expenses.forEach(exp => {
+                const val = parseFloat(document.getElementById(exp.id).value) || 0;
+                total += val;
+            });
+            const perPerson = total / TRIP_DATA.members.length;
+            
+            // ใส่คอมม่าให้ตัวเลขดูอ่านง่าย
+            document.getElementById('cost-per-person').innerText = 
+                perPerson.toLocaleString('th-TH', { maximumFractionDigits: 0 });
+        }
+
+        // โหลดข้อมูลเมื่อเปิดเว็บ
+        window.onload = renderData;
+    </script>
+</body>
+</html>
