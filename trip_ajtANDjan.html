@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>💕 ทริปสวีทเกาะสีชัง 🌸</title>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Prompt', 'sans-serif'] },
+                    colors: { 
+                        glassPink: 'rgba(244, 63, 94, 0.1)',
+                        glassWhite: 'rgba(255, 255, 255, 0.45)',
+                        glassWhiteSolid: 'rgba(255, 255, 255, 0.7)'
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- React & Babel -->
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+
+    <style>
+        body { 
+            background-color: #fff1f2; /* Soft rose background */
+            color: #4c0519; /* Dark rose text */
+            margin: 0; 
+            min-height: 100vh; 
+            overflow-x: hidden;
+            padding-bottom: 120px; 
+        }
+
+        @media (max-width: 768px) {
+            body { padding-bottom: 110px; }
+        }
+        
+        /* 1. Liquid Background Animations (Pink/Rose tones) */
+        .bg-mesh {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -2;
+            background-color: #fdf2f8; /* pink-50 */
+            background-image: 
+                radial-gradient(at 0% 0%, hsla(343,100%,76%,0.15) 0, transparent 50%), 
+                radial-gradient(at 50% 0%, hsla(350,100%,88%,0.2) 0, transparent 50%), 
+                radial-gradient(at 100% 0%, hsla(339,100%,75%,0.15) 0, transparent 50%);
+        }
+
+        .orb {
+            position: fixed; border-radius: 50%; filter: blur(80px); opacity: 0.6; z-index: -1;
+            animation: float 20s infinite ease-in-out alternate;
+        }
+        .orb-1 { width: 50vw; height: 50vw; top: -10%; left: -10%; background: #fbcfe8; } /* pink-200 */
+        .orb-2 { width: 60vw; height: 60vw; bottom: -20%; right: -10%; background: #fecdd3; animation-delay: -5s; } /* rose-200 */
+        .orb-3 { width: 40vw; height: 40vw; top: 30%; left: 40%; background: #ffedd5; animation-delay: -10s; } /* orange-100 */
+
+        @keyframes float { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(10vw, -10vh) scale(1.1); } }
+
+        /* 2. Glassmorphism Utilities */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.45);
+            backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            border-radius: 28px;
+            box-shadow: 
+                0 10px 25px -5px rgba(244, 63, 94, 0.05), 
+                0 8px 10px -6px rgba(244, 63, 94, 0.02),
+                inset 0 1px 0 rgba(255, 255, 255, 0.6);
+            transition: all 0.3s ease;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.65);
+            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+        }
+
+        /* Interactive Options */
+        .option-label { cursor: pointer; display: block; height: 100%; }
+        .option-input:checked + .glass-card {
+            background: rgba(255, 241, 242, 0.9); /* rose-50 */
+            border-color: #fb7185; /* rose-400 */
+            box-shadow: 0 12px 25px -5px rgba(244, 63, 94, 0.25), inset 0 0 0 2px #fb7185;
+            transform: translateY(-3px);
+        }
+        .option-input:checked + .glass-card .check-icon { transform: scale(1); opacity: 1; }
+        .check-icon { transform: scale(0); opacity: 0; transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1); }
+
+        /* Sticky Summary */
+        .sticky-summary {
+            position: fixed;
+            background: rgba(76, 5, 25, 0.85); /* dark rose */
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            color: white;
+            box-shadow: 0 -10px 40px rgba(244, 63, 94, 0.2);
+            z-index: 40;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+            bottom: 0; left: 0; width: 100%;
+            border-radius: 30px 30px 0 0;
+            padding: 20px 24px;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        @media (min-width: 768px) {
+            .sticky-summary {
+                bottom: 24px; left: auto; right: 40px; width: 450px;
+                border-radius: 999px;
+                padding: 16px 32px;
+                border: 1px solid rgba(255, 255, 255, 0.2);
+            }
+        }
+
+        /* Animations */
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-slide-up { animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        
+        /* Modal Backdrop */
+        .modal-backdrop {
+            background: rgba(76, 5, 25, 0.3);
+            backdrop-filter: blur(8px);
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-mesh"></div>
+    <div class="orb orb-1"></div><div class="orb orb-2"></div><div class="orb orb-3"></div>
+    
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useMemo } = React;
+
+        // --- INITIAL DATA ---
+        // เปลี่ยนเป็น 2 คน ที & แจน
+        const initialMembers = [
+            { id: 1, name: 'ที 👦🏻' }, 
+            { id: 2, name: 'แจน 👧🏻' }
+        ];
+
+        const initialItinerary = [
+            {
+                id: 'trip_go', date: '2026-10-24', time: '05:00',
+                name: '🚗 ขาไป: ออกเดินทางสู่ความรัก',
+                desc: 'แวะกินข้าวเช้า+เที่ยงอร่อยๆ ระหว่างทาง (ทีเลี้ยงเอง!)',
+                hasOptions: true,
+                selectedOption: 'optA',
+                syncGroup: 'transport_main',
+                options: [
+                    { id: 'optA', label: 'Plan A: ขับรถส่วนตัวไปเองชิลๆ', cost: 1800, desc: 'ค่าน้ำมันไปกลับ ~1,300 + ค่าจอดรถที่เกาะลอย 500' },
+                    { id: 'optB', label: 'Plan B: นั่งรถไฟได้ฟีลลิ่ง', cost: 200, desc: 'ไปเจอที่หัวลำโพง ขบวน 283 + ต่อสองแถวไปท่าเรือ (บรรยากาศดี)' }
+                ]
+            },
+            {
+                id: 'boat_go', date: '2026-10-24', time: '13:00',
+                name: '🛥️ นั่งเรือข้ามฟากไปเกาะสีชัง',
+                desc: 'รับลมทะเลเย็นๆ ถ่ายรูปคู่บนเรือ',
+                hasOptions: true,
+                selectedOption: 'optA',
+                syncGroup: 'boat_main',
+                options: [
+                    { id: 'optA', label: 'เรือข้ามฟากปกติ (40 นาที)', cost: 120, desc: 'คนละ 60 บาท ซึมซับบรรยากาศ' },
+                    { id: 'optC', label: 'เรือสปีดโบ๊ทส่วนตัว (15 นาที)', cost: 1600, desc: 'เหมาลำลำเล็ก เป็นส่วนตัวสุดๆ ไม่ต้องรอใคร' }
+                ]
+            },
+            { id: 2, date: '2026-10-24', time: '14:00', name: '🛵 เช่ามอเตอร์ไซค์แว๊นรอบเกาะ', desc: 'ทีเป็นคนขับ แจนซ้อนท้ายกอดเอวแน่นๆ', hasOptions: false, cost: 300 },
+            {
+                id: 3, date: '2026-10-24', time: '14:30',
+                name: '🏨 เช็คอินเข้าที่พักสุดสวีท',
+                desc: 'พักผ่อนชิลๆ นอนดูวิวทะเล',
+                hasOptions: true,
+                selectedOption: 'optA',
+                options: [
+                    { id: 'optA', label: 'ปารีฮัท รีสอร์ท', cost: 2500, desc: 'ฟีลกระท่อมริมหน้าผา โรแมนติกมาก' },
+                    { id: 'optB', label: 'โนโวเทล เกาะสีชัง', cost: 3000, desc: 'หรูหรา นอนสบาย สระว่ายน้ำสวย' }
+                ]
+            },
+            { id: 4, date: '2026-10-24', time: '15:30', name: '☕ คาเฟ่เรือนซาร์เลวิช', desc: 'แวะจิบกาแฟ ถ่ายรูปคู่แสงสวยๆ ที่สะพานอัษฎางค์', hasOptions: false, cost: 500 },
+            { id: 5, date: '2026-10-24', time: '16:30', name: '🙏 ไหว้ศาลเจ้าพ่อเขาใหญ่', desc: 'ทำบุญขอพรให้รักเรายืนยาว', hasOptions: false, cost: 200 },
+            { id: 6, date: '2026-10-24', time: '17:30', name: '🌊 เดินเล่นรับลม หาดถ้ำพัง', desc: 'รอดูพระอาทิตย์ตกดินด้วยกัน', hasOptions: false, cost: 0 },
+            {
+                id: 7, date: '2026-10-24', time: '18:30',
+                name: '🍽️ ดินเนอร์มื้อค่ำสุดพิเศษ',
+                desc: 'เติมพลังด้วยซีฟู้ดสดๆ',
+                hasOptions: true,
+                selectedOption: 'optB',
+                options: [
+                    { id: 'optA', label: 'ร้านชาวบ้านชาวเล', cost: 1200, desc: 'อร่อยถูกปาก บรรยากาศเป็นกันเอง' },
+                    { id: 'optB', label: 'ร้านชมตะวัน', cost: 1500, desc: 'ร้านดังมิชลินไกด์ โรแมนติกสุดๆ' },
+                    { id: 'optC', label: 'ซื้อหมูกระทะ/ซีฟู้ดมากินที่ห้อง', cost: 1000, desc: 'ปิ้งย่างกันสองคน ดูหนังชิลๆ' }
+                ]
+            },
+            {
+                id: 8, date: '2026-10-24', time: '21:00',
+                name: '🍷 นั่งชิลรอบดึก',
+                desc: '',
+                hasOptions: true,
+                selectedOption: 'optA',
+                options: [
+                    { id: 'optA', label: 'นั่งบาร์ฟังเพลง', cost: 600, desc: 'จิบค็อกเทลฟังเพลงเบาๆ' },
+                    { id: 'optB', label: 'ซื้อเบียร์/ไวน์ กลับห้อง', cost: 500, desc: 'นั่งริมระเบียง ฟังเสียงคลื่น' }
+                ]
+            },
+            { id: 9, date: '2026-10-25', time: '08:00', name: '📸 ถ่ายรูปแสงเช้าที่ช่องเขาขาด', desc: 'ตื่นมารับอากาศบริสุทธิ์ แวะช่องเขาขาด ถ้ำทะลุ', hasOptions: false, cost: 0 },
+            { id: 10, date: '2026-10-25', time: '09:30', name: '🍳 ทานอาหารเช้า', desc: 'กินข้าวเช้าที่โรงแรม ก่อนเตรียมตัวเก็บของ', hasOptions: false, cost: 0 },
+            {
+                id: 'boat_back', date: '2026-10-25', time: '13:00',
+                name: '🛥️ นั่งเรือกลับฝั่ง',
+                desc: '(ระบบจะเลือกตามขามาอัตโนมัติ)',
+                hasOptions: true,
+                selectedOption: 'optA',
+                syncGroup: 'boat_main',
+                options: [
+                    { id: 'optA', label: 'เรือข้ามฟากปกติ', cost: 120, desc: '' },
+                    { id: 'optC', label: 'เรือสปีดโบ๊ทส่วนตัว', cost: 1600, desc: '' }
+                ]
+            },
+            { id: 12, date: '2026-10-25', time: '14:30', name: '💦 เข้าพัก Pool Villa สุดไพรเวท (บางแสน)', desc: 'เล่นน้ำสระส่วนตัว ถ่ายรูปปังๆ', hasOptions: false, cost: 4500 },
+            { id: 13, date: '2026-10-25', time: '16:00', name: '🍰 คาเฟ่ฮอปปิ้งชลบุรี', desc: 'ไปหาขนมเค้กอร่อยๆ ถ่ายรูปให้แจนลงไอจี', hasOptions: false, cost: 500 },
+            { id: 14, date: '2026-10-25', time: '18:30', name: '🍱 ดินเนอร์มื้อใหญ่ส่งท้ายทริป', desc: 'ทานของอร่อยริมหาดบางแสนวอนนภา', hasOptions: false, cost: 1500 },
+            {
+                id: 'trip_back', date: '2026-10-26', time: '10:30',
+                name: '🚗 ขากลับ: เดินทางกลับบ้านปลอดภัย',
+                desc: 'เดินทางกลับพิษณุโลกพร้อมความทรงจำดีๆ',
+                hasOptions: true,
+                selectedOption: 'optA',
+                syncGroup: 'transport_main',
+                options: [
+                    { id: 'optA', label: 'Plan A: ขับรถกลับชิลๆ', cost: 1300, desc: 'เติมน้ำมันขากลับ' },
+                    { id: 'optB', label: 'Plan B: นั่งรถไฟ/รถตู้', cost: 200, desc: 'ค่าเดินทางขากลับ' }
+                ]
+            }
+        ];
+
+        // --- COMPONENTS ---
+        const Modal = ({ title, onClose, children }) => (
+            <div className="fixed inset-0 modal-backdrop z-50 flex items-center justify-center p-4 md:p-6">
+                <div className="glass-panel w-full max-w-lg shadow-2xl animate-slide-up max-h-[90vh] overflow-y-auto border border-white/80 relative bg-white/80">
+                    
+                    <button 
+                        onClick={onClose} 
+                        className="absolute top-4 right-4 w-10 h-10 flex items-center justify-center bg-rose-100 hover:bg-rose-500 text-rose-600 hover:text-white rounded-full backdrop-blur-md transition-all duration-300 shadow-sm hover:shadow-md hover:rotate-90 z-10"
+                        aria-label="Close"
+                    >
+                        <i className="fa-solid fa-xmark text-xl"></i>
+                    </button>
+
+                    <div className="p-6 md:p-8 pt-8">
+                        <div className="mb-6 border-b border-rose-200 pb-3 pr-8">
+                            <h3 className="text-2xl font-bold text-rose-800">{title}</h3>
+                        </div>
+                        {children}
+                    </div>
+                </div>
+            </div>
+        );
+
+        const App = () => {
+            const [members, setMembers] = useState(initialMembers);
+            const [itinerary, setItinerary] = useState(initialItinerary);
+            const [modals, setModals] = useState({ members: false, plan: false });
+
+            const [newPlanType, setNewPlanType] = useState('single');
+            const [newOptions, setNewOptions] = useState([{ id: 'optA', label: '', cost: 0, desc: '' }]);
+
+            // --- Handlers ---
+            const handleOptionSelect = (itemId, optionId) => {
+                setItinerary(prev => {
+                    const changedItem = prev.find(i => i.id === itemId);
+                    
+                    if (changedItem.syncGroup) {
+                        return prev.map(item => 
+                            item.syncGroup === changedItem.syncGroup ? { ...item, selectedOption: optionId } : item
+                        );
+                    }
+                    
+                    return prev.map(item => item.id === itemId ? { ...item, selectedOption: optionId } : item);
+                });
+            };
+
+            const toggleModal = (key) => {
+                setModals(prev => ({ ...prev, [key]: !prev[key] }));
+                if(key === 'plan' && !modals.plan) {
+                    setNewPlanType('single');
+                    setNewOptions([{ id: 'optA', label: '', cost: 0, desc: '' }]);
+                }
+            };
+
+            const addMember = (e) => { e.preventDefault(); const n = e.target.name.value.trim(); if(n){ setMembers([...members, {id: Date.now(), name: n}]); e.target.reset(); }};
+            const removeMember = (id) => setMembers(members.filter(m => m.id !== id));
+
+            const handleAddOptionField = () => {
+                const nextChar = String.fromCharCode(65 + newOptions.length);
+                setNewOptions([...newOptions, { id: `opt${nextChar}`, label: '', cost: 0, desc: '' }]);
+            };
+
+            const handleOptionChange = (index, field, value) => {
+                const updated = [...newOptions];
+                updated[index][field] = value;
+                setNewOptions(updated);
+            };
+
+            const removeOptionField = (index) => {
+                if(newOptions.length > 1) {
+                    const updated = newOptions.filter((_, i) => i !== index);
+                    const reIndexed = updated.map((opt, i) => ({ ...opt, id: `opt${String.fromCharCode(65 + i)}` }));
+                    setNewOptions(reIndexed);
+                }
+            };
+
+            const submitNewPlan = (e) => {
+                e.preventDefault();
+                const fd = new FormData(e.target);
+                
+                const newItem = {
+                    id: `custom_${Date.now()}`,
+                    date: fd.get('date'),
+                    time: fd.get('time'),
+                    name: fd.get('name'),
+                    desc: fd.get('desc'),
+                };
+
+                if (newPlanType === 'single') {
+                    newItem.hasOptions = false;
+                    newItem.cost = parseFloat(fd.get('cost') || 0);
+                } else {
+                    newItem.hasOptions = true;
+                    newItem.selectedOption = 'optA';
+                    newItem.options = newOptions.filter(opt => opt.label.trim() !== '').map(opt => ({
+                        ...opt, 
+                        cost: parseFloat(opt.cost || 0),
+                        label: opt.label || `Plan ${opt.id.replace('opt','')}`
+                    }));
+                    
+                    if(newItem.options.length === 0) return alert('กรุณากรอกตัวเลือกอย่างน้อย 1 อัน');
+                }
+
+                setItinerary([...itinerary, newItem].sort((a,b) => a.date.localeCompare(b.date) || a.time.localeCompare(b.time)));
+                toggleModal('plan');
+            };
+
+            const removePlan = (id) => setItinerary(itinerary.filter(i => i.id !== id));
+
+            // --- Calculations ---
+            const totalCost = itinerary.reduce((sum, item) => {
+                if (item.hasOptions) {
+                    const opt = item.options.find(o => o.id === item.selectedOption);
+                    return sum + (opt ? opt.cost : 0);
+                }
+                return sum + (item.cost || 0);
+            }, 0);
+
+            const costPerPerson = members.length > 0 ? totalCost / members.length : 0;
+
+            const groupedItinerary = itinerary.reduce((acc, item) => {
+                if (!acc[item.date]) acc[item.date] = [];
+                acc[item.date].push(item);
+                return acc;
+            }, {});
+
+            const formatDate = (dateStr) => new Date(dateStr).toLocaleDateString('th-TH', { day: 'numeric', month: 'short', year: 'numeric' });
+
+            return (
+                <div className="p-4 md:p-8 font-sans">
+                    <div className="max-w-6xl mx-auto space-y-8">
+                        
+                        {/* Header */}
+                        <div className="glass-panel p-8 md:p-12 text-center animate-slide-up border-t border-l border-white/60 relative overflow-hidden group hover:shadow-xl hover:border-white/80 transition-all">
+                            <div className="absolute top-0 right-0 p-6 opacity-20 transition-transform duration-700 group-hover:scale-110">
+                                <i className="fa-solid fa-heart text-8xl md:text-9xl text-rose-300"></i>
+                            </div>
+                            <h1 className="text-4xl md:text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-rose-500 to-pink-600 mb-4 tracking-tight drop-shadow-sm relative z-10">💕 ทริปสวีทเกาะสีชัง 🌸</h1>
+                            <p className="text-rose-900 font-semibold text-base md:text-lg relative z-10 bg-white/50 inline-block px-5 py-1.5 rounded-full shadow-sm backdrop-blur-sm border border-white/60">พิษณุโลก ➔ เกาะสีชัง ➔ พูลวิลล่า (24-26 ต.ค. ทริปของเราสองคน)</p>
+                        </div>
+
+                        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                            
+                            {/* Left Column */}
+                            <div className="lg:col-span-4 space-y-6">
+                                <div className="glass-panel p-6 animate-slide-up hover:border-white/80 hover:shadow-lg transition-all" style={{animationDelay: '0.1s'}}>
+                                    <div className="flex justify-between items-center mb-6 pb-4 border-b border-rose-200/60">
+                                        <h2 className="text-xl font-bold text-rose-800"><i className="fa-solid fa-heart-pulse text-rose-500 mr-2"></i> คู่รักนักเดินทาง</h2>
+                                        <button onClick={()=>toggleModal('members')} className="glass-card hover:bg-white text-rose-700 px-4 py-2 rounded-xl text-sm font-semibold transition-all shadow-sm hover:shadow-md"><i className="fa-solid fa-pen"></i> แก้ไข</button>
+                                    </div>
+                                    <div className="flex flex-wrap gap-3">
+                                        {members.map(m => (
+                                            <span key={m.id} className="glass-card px-5 py-2.5 rounded-full text-rose-900 font-bold text-sm border-white/60 shadow-sm flex items-center gap-2">
+                                                {m.name}
+                                            </span>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Right Column */}
+                            <div className="lg:col-span-8 glass-panel p-4 md:p-8 animate-slide-up hover:border-white/80 hover:shadow-lg transition-all" style={{animationDelay: '0.15s'}}>
+                                <div className="flex justify-between items-center mb-8 pb-4 border-b border-rose-200/60">
+                                    <h2 className="text-2xl font-bold text-rose-800"><i className="fa-solid fa-route text-pink-500 mr-3"></i> แพลน & ค่าใช้จ่าย</h2>
+                                    <button onClick={()=>toggleModal('plan')} className="bg-rose-500 hover:bg-rose-600 text-white px-5 py-2.5 rounded-xl text-sm font-semibold shadow-lg shadow-rose-200 transition-all hover:-translate-y-1"><i className="fa-solid fa-plus mr-1"></i> เพิ่มแพลน</button>
+                                </div>
+
+                                <div className="space-y-12">
+                                    {Object.keys(groupedItinerary).map(date => (
+                                        <div key={date}>
+                                            <h3 className="inline-flex items-center bg-rose-800 backdrop-blur-md text-white px-5 py-2.5 rounded-full text-sm font-bold mb-8 shadow-md">
+                                                <i className="fa-regular fa-calendar-heart mr-2"></i>{formatDate(date)}
+                                            </h3>
+                                            
+                                            <div className="border-l-[3px] border-rose-200 ml-4 md:ml-5 pl-6 md:pl-8 space-y-10 relative">
+                                                {groupedItinerary[date].map(item => (
+                                                    <div key={item.id} className="relative group">
+                                                        <div className="absolute -left-[35px] md:-left-[43px] top-1 w-5 h-5 bg-rose-400 rounded-full border-[4px] border-[#fdf2f8] shadow-sm group-hover:scale-125 group-hover:bg-pink-400 transition-all duration-300"></div>
+                                                        
+                                                        <div className="flex flex-col md:flex-row md:justify-between md:items-start gap-2 mb-2">
+                                                            <div className="pr-6">
+                                                                <span className="font-extrabold text-pink-600 mr-3">{item.time}</span>
+                                                                <span className="text-lg font-bold text-rose-900">{item.name}</span>
+                                                            </div>
+                                                            <div className="flex items-center gap-3">
+                                                                {!item.hasOptions && item.cost > 0 && (
+                                                                    <span className="bg-emerald-100/90 text-emerald-800 px-3 py-1 rounded-lg text-sm font-bold border border-emerald-200 shadow-sm">฿{item.cost.toLocaleString()}</span>
+                                                                )}
+                                                                {item.id.toString().startsWith('custom_') && (
+                                                                    <button onClick={() => removePlan(item.id)} className="text-red-400 hover:text-red-600 hover:bg-red-50 p-2 rounded-lg text-sm opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-all"><i className="fa-solid fa-trash"></i></button>
+                                                                )}
+                                                            </div>
+                                                        </div>
+                                                        
+                                                        {item.desc && <p className="text-rose-700/80 text-sm mb-4 leading-relaxed bg-white/50 inline-block px-3 py-1 rounded-lg">"{item.desc}"</p>}
+
+                                                        {item.hasOptions && (
+                                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-4">
+                                                                {item.options.map(opt => {
+                                                                    const isSelected = item.selectedOption === opt.id;
+                                                                    return (
+                                                                        <label key={opt.id} className="option-label">
+                                                                            <input type="radio" name={`choice-${item.id}`} className="hidden option-input" 
+                                                                                   checked={isSelected} onChange={() => handleOptionSelect(item.id, opt.id)} />
+                                                                            <div className="glass-card p-4 transition-all duration-300 flex justify-between items-center h-full group/card hover:bg-white hover:border-pink-300 border-white/60 shadow-sm hover:shadow-md">
+                                                                                <div className="pr-3">
+                                                                                    <div className={`font-bold ${isSelected ? 'text-rose-600' : 'text-rose-800'}`}>{opt.label}</div>
+                                                                                    {opt.desc && <div className="text-xs text-rose-500/80 mt-1 leading-snug">{opt.desc}</div>}
+                                                                                </div>
+                                                                                <div className="text-right flex-shrink-0 flex flex-col items-end justify-center">
+                                                                                    <div className={`font-bold ${isSelected ? 'text-emerald-500 text-lg' : 'text-slate-600'}`}>฿{opt.cost.toLocaleString()}</div>
+                                                                                    <i className="fa-solid fa-heart text-pink-400 text-xl check-icon mt-1 drop-shadow-sm"></i>
+                                                                                </div>
+                                                                            </div>
+                                                                        </label>
+                                                                    )
+                                                                })}
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* STICKY TOTAL BAR */}
+                    <div className="sticky-summary animate-slide-up" style={{animationDelay: '0.3s'}}>
+                        <div>
+                            <div className="text-[10px] md:text-xs text-rose-200 font-medium uppercase tracking-wider mb-1">รวมงบทริปแห่งรัก</div>
+                            <div className="text-2xl md:text-3xl font-extrabold tracking-tight">฿{totalCost.toLocaleString()}</div>
+                        </div>
+                        <div className="text-right border-l border-rose-400/30 pl-4 md:pl-5">
+                            <div className="text-[10px] md:text-xs text-rose-200 font-medium uppercase tracking-wider mb-1">หารแล้วตกคนละ</div>
+                            <div className="text-2xl md:text-3xl font-extrabold text-pink-300 tracking-tight">฿{Math.ceil(costPerPerson).toLocaleString()}</div>
+                        </div>
+                    </div>
+
+                    {/* MODAL: Members */}
+                    {modals.members && (
+                        <Modal title="จัดการชื่อที่รัก" onClose={() => toggleModal('members')}>
+                            <form onSubmit={addMember} className="flex gap-2 mb-6">
+                                <input name="name" type="text" placeholder="ชื่อ..." required className="flex-1 px-4 py-3 rounded-xl border border-rose-200 focus:outline-none focus:border-pink-400 bg-white/60 focus:bg-white transition-colors shadow-inner text-rose-800" />
+                                <button type="submit" className="bg-rose-500 text-white px-6 py-3 rounded-xl font-bold shadow-md hover:bg-rose-600 hover:-translate-y-0.5 transition-all">เพิ่ม</button>
+                            </form>
+                            <div className="flex flex-col gap-2">
+                                {members.map(m => (
+                                    <div key={m.id} className="flex justify-between items-center bg-white/70 p-3 px-4 rounded-xl border border-rose-100">
+                                        <span className="font-semibold text-rose-800">{m.name}</span>
+                                        <button onClick={() => removeMember(m.id)} className="text-rose-400 hover:text-rose-600 bg-white hover:bg-rose-50 p-2 rounded-lg transition-colors shadow-sm"><i className="fa-solid fa-trash"></i></button>
+                                    </div>
+                                ))}
+                            </div>
+                        </Modal>
+                    )}
+                    
+                    {/* MODAL: Plan CRUD */}
+                    {modals.plan && (
+                        <Modal title="เพิ่มแพลนเดท" onClose={() => toggleModal('plan')}>
+                            <form onSubmit={submitNewPlan} className="flex flex-col gap-4">
+                                <div className="flex gap-3">
+                                    <div className="flex-1"><label className="text-xs font-semibold text-rose-500 mb-1 block">วันที่</label><input name="date" type="date" required defaultValue="2026-10-24" className="w-full px-4 py-2.5 rounded-xl border border-rose-200 focus:outline-none focus:border-pink-400 bg-white/60 text-rose-800" /></div>
+                                    <div className="flex-1"><label className="text-xs font-semibold text-rose-500 mb-1 block">เวลา</label><input name="time" type="time" required className="w-full px-4 py-2.5 rounded-xl border border-rose-200 focus:outline-none focus:border-pink-400 bg-white/60 text-rose-800" /></div>
+                                </div>
+                                <div><input name="name" type="text" placeholder="ชื่อกิจกรรม / สถานที่" required className="w-full px-4 py-3 rounded-xl border border-rose-200 focus:outline-none focus:border-pink-400 bg-white/60 font-semibold shadow-inner text-rose-800" /></div>
+                                <div><input name="desc" type="text" placeholder="ความรู้สึก / แคปชั่น (ไม่บังคับ)" className="w-full px-4 py-2.5 rounded-xl border border-rose-200 focus:outline-none focus:border-pink-400 bg-white/60 text-sm text-rose-800" /></div>
+
+                                {/* Plan Type Switcher */}
+                                <div className="bg-rose-50/80 p-1.5 rounded-xl flex gap-1 mt-2">
+                                    <button type="button" onClick={()=>setNewPlanType('single')} className={`flex-1 py-2 rounded-lg text-sm font-semibold transition-all ${newPlanType === 'single' ? 'bg-white shadow text-rose-600' : 'text-rose-400 hover:text-rose-600'}`}>ราคาเดียวตายตัว</button>
+                                    <button type="button" onClick={()=>setNewPlanType('multiple')} className={`flex-1 py-2 rounded-lg text-sm font-semibold transition-all ${newPlanType === 'multiple' ? 'bg-white shadow text-rose-600' : 'text-rose-400 hover:text-rose-600'}`}>มีหลายตัวเลือก (Plan A, B...)</button>
+                                </div>
+
+                                {/* Dynamic Fields based on Type */}
+                                {newPlanType === 'single' ? (
+                                    <div className="bg-white/50 p-4 rounded-xl border-dashed border-2 border-rose-200 mt-2">
+                                        <label className="text-xs font-semibold text-rose-500 mb-1 block">ค่าใช้จ่ายรวม (บาท)</label>
+                                        <input name="cost" type="number" placeholder="ใส่ 0 ถ้าไม่มีค่าใช้จ่าย" defaultValue="0" className="w-full px-4 py-2.5 rounded-xl border border-rose-200 focus:outline-none focus:border-pink-400 bg-white text-rose-800" />
+                                    </div>
+                                ) : (
+                                    <div className="space-y-3 mt-2 bg-white/40 p-4 rounded-xl border border-rose-200">
+                                        <p className="text-xs font-semibold text-rose-500">กำหนดตัวเลือก (เพื่อเปรียบเทียบราคา)</p>
+                                        {newOptions.map((opt, idx) => (
+                                            <div key={idx} className="flex gap-2 items-start bg-white p-3.5 rounded-xl border border-rose-100 shadow-sm relative group">
+                                                <div className="flex-1 space-y-2.5">
+                                                    <input type="text" placeholder={`ชื่อตัวเลือก (เช่น Plan ${String.fromCharCode(65 + idx)})`} value={opt.label} onChange={(e) => handleOptionChange(idx, 'label', e.target.value)} required className="w-full px-3 py-2 rounded-lg border border-rose-200 text-sm focus:outline-none focus:border-pink-400 text-rose-800" />
+                                                    <div className="flex gap-2">
+                                                        <input type="number" placeholder="ราคา (บาท)" value={opt.cost || ''} onChange={(e) => handleOptionChange(idx, 'cost', e.target.value)} className="w-1/3 px-3 py-2 rounded-lg border border-rose-200 text-sm focus:outline-none focus:border-pink-400 text-rose-800" />
+                                                        <input type="text" placeholder="รายละเอียดเสริม" value={opt.desc} onChange={(e) => handleOptionChange(idx, 'desc', e.target.value)} className="flex-1 px-3 py-2 rounded-lg border border-rose-200 text-sm focus:outline-none focus:border-pink-400 text-rose-800" />
+                                                    </div>
+                                                </div>
+                                                {newOptions.length > 1 && (
+                                                    <button type="button" onClick={() => removeOptionField(idx)} className="text-rose-400 hover:text-rose-600 bg-rose-50 hover:bg-rose-100 p-2 rounded-lg transition-colors"><i className="fa-solid fa-times"></i></button>
+                                                )}
+                                            </div>
+                                        ))}
+                                        <button type="button" onClick={handleAddOptionField} className="w-full py-2.5 mt-2 border-2 border-dashed border-rose-300 text-rose-500 rounded-xl text-sm font-semibold hover:bg-rose-50 hover:border-rose-400 transition-colors"><i className="fa-solid fa-plus mr-1"></i> เพิ่มตัวเลือกย่อย</button>
+                                    </div>
+                                )}
+
+                                <button type="submit" className="bg-rose-500 text-white px-6 py-3.5 rounded-xl font-bold mt-4 shadow-lg shadow-rose-200 hover:bg-rose-600 hover:-translate-y-0.5 transition-all text-lg">บันทึกข้อมูลเดท</button>
+                            </form>
+                        </Modal>
+                    )}
+                </div>
+            );
+        };
+        const root = ReactDOM.createRoot(document.getElementById('root')); root.render(<App />);
+    </script>
+</body>
+</html>
