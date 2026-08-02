@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🌴 ทริปเดือดเกาะสีชัง (Glassmorphism) 🌊</title>
+    <title>🌴 ทริปล่มเกาะสีชัง 🌊</title>
     
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -107,8 +107,8 @@
 
         // --- INITIAL DATA ---
         const initialMembers = [
-            { id: 1, name: 'มึง 1' }, { id: 2, name: 'มึง 2' }, { id: 3, name: 'มึง 3' }, { id: 4, name: 'มึง 4' },
-            { id: 5, name: 'มึง 5' }, { id: 6, name: 'มึง 6' }, { id: 7, name: 'มึง 7' }, { id: 8, name: 'มึง 8' }
+            { id: 1, name: 'ฟิว' }, { id: 2, name: 'ที' }, { id: 3, name: 'บิว' }, { id: 4, name: 'อีตัวต้นเรื่อง (หอม)' },
+            { id: 5, name: 'เบส' }, { id: 6, name: 'เฟิร์ส' }, { id: 7, name: 'แอ็ค' }
         ];
 
         const initialItinerary = [
@@ -120,7 +120,7 @@
                 selectedOption: 'optA',
                 syncGroup: 'transport_main', // ใช้สำหรับ Sync ขาไป-กลับ
                 options: [
-                    { id: 'optA', label: 'Plan A: ขับรถส่วนตัว', cost: 3100, desc: 'น้ำมันไปกลับ 2,600 + ที่จอดรถ 500 (2คัน)' },
+                    { id: 'optA', label: 'Plan A: ขับรถส่วนตัว', cost: 3100, desc: 'น้ำมันไป (2คัน) 2,600 + ที่จอดรถ1คืน 500 (2คัน)' },
                     { id: 'optB', label: 'Plan B: นั่งรถไฟ', cost: 460, desc: 'ไปเจอหัวลำโพง ขบวน 283 (260฿) + ต่อสองแถว (200฿)' }
                 ]
             },
@@ -133,9 +133,12 @@
                 syncGroup: 'boat_main',
                 options: [
                     { id: 'optA', label: 'เรือธรรมดา (40 นาที)', cost: 480, desc: '60 บาท * 8 คน' },
-                    { id: 'optB', label: 'เรือเฟอร์รี่ แสงประทีป (15 นาที)', cost: 2100, desc: 'เหมาลำ' }
+                    { id: 'optB', label: 'เรือเฟอร์รี่ ลำกลาง ไม่เกิน 15 คน แสงประทีป (15 นาที)', cost: 2100, desc: 'เหมาลำ' }
+                    { id: 'optC', label: 'เรือเฟอร์รี่ ลำเล็ก ไม่เกิน 8 คน แสงประทีป (15 นาที)', cost: 1600, desc: 'เหมาลำ' }
+
                 ]
             },
+            { id: 2, date: '2026-10-24', time: '14:00', name: 'หารถเช่า', desc: 'เช่ารถสักสี่คัน', hasOptions: false, cost: 1200 },
             {
                 id: 3, date: '2026-10-24', time: '14:00',
                 name: 'เข้าที่พักเกาะสีชัง (นอนโง่ๆ อยู่ห้องบ้าง เหนื่อยไอ่สัส)',
@@ -143,13 +146,13 @@
                 hasOptions: true,
                 selectedOption: 'optA',
                 options: [
-                    { id: 'optA', label: 'เกาะสีชังอันซีน / ปารีฮัท', cost: 10000, desc: '2,500/ห้อง' },
-                    { id: 'optB', label: 'โนโวเทล / ชาวบ้านชาวเล', cost: 12000, desc: '3,000/ห้อง' }
+                    { id: 'optA', label: 'ที่พักเกาะสีชังอันซีน / ที่พักเปารีฮัท', cost: 10000, desc: '2,500/ห้อง' },
+                    { id: 'optB', label: 'ที่พักเโนโวเทล / ที่พักเชาวบ้านชาวเล', cost: 12000, desc: '3,000/ห้อง' }
                 ]
             },
             { id: 4, date: '2026-10-24', time: '14:45', name: 'คาเฟ่เรือนซาร์เลวิช', desc: 'ถ่ายรูปสะพานอัษฎางค์', hasOptions: false, cost: 2080 },
-            { id: 5, date: '2026-10-24', time: '15:00', name: 'ไหว้พระศาลเจ้าพ่อเขาใหญ่', desc: '', hasOptions: false, cost: 800 },
-            { id: 6, date: '2026-10-24', time: '16:30', name: 'เล่นน้ำหาดถ้ำพัง', desc: '', hasOptions: false, cost: 0 },
+            { id: 5, date: '2026-10-24', time: '15:00', name: 'ไหว้พระศาลเจ้าพ่อเขาใหญ่', desc: 'ตามจิตศรัธธา', hasOptions: false, cost: 800 },
+            { id: 6, date: '2026-10-24', time: '16:30', name: 'เล่นน้ำหาดถ้ำพัง', desc: 'ถ่ายรูปสิรอเหี้ยไร', hasOptions: false, cost: 0 },
             {
                 id: 7, date: '2026-10-24', time: '18:00',
                 name: 'กินข้าวเย็นบ้าง แดกแต่หญ้า',
@@ -159,7 +162,7 @@
                 options: [
                     { id: 'optA', label: 'ร้านชาวบ้านชาวเล', cost: 2600, desc: 'กลางๆ ติดหวาน' },
                     { id: 'optB', label: 'ร้านชมตะวัน', cost: 2600, desc: 'ได้มิชลิน' },
-                    { id: 'optC', label: 'ซื้อมาทำกินเอง', cost: 1500, desc: 'ซื้อของสดมาปิ้งย่างที่พัก' }
+                    { id: 'optC', label: 'ซื้อมาทำกินเอง', cost: 3100, desc: 'ซื้อของสดมาปิ้งย่างที่พัก พูดเฉยๆ ไม่ทำหรอก' }
                 ]
             },
             {
@@ -173,7 +176,7 @@
                     { id: 'optB', label: 'เบียร์ (เอาฟุบ)', cost: 2000, desc: '' }
                 ]
             },
-            { id: 9, date: '2026-10-25', time: '07:00', name: 'เดินตลาด - ถ่ายรูป', desc: 'ตื่นเช้าถ้ามีปัญญา (ถ้าตอแหลหน่อยจะเล่นน้ำก็เรื่องของมึง)', hasOptions: false, cost: 0 },
+            { id: 9, date: '2026-10-25', time: '07:00', name: 'เดินตลาด - ถ่ายรูปถ้ำทะลุ**', desc: 'ตื่นเช้าถ้ามีปัญญา (ถ้าตอแหลหน่อยจะเล่นน้ำก็เรื่องของมึง)', hasOptions: false, cost: 0 },
             { id: 10, date: '2026-10-25', time: '08:30', name: 'ข้าวเช้า (ถ้าตื่น)', desc: 'พนันว่าถ้าไม่ตื่นมีก็ไม่แดกกันแน่นอน กลับมาเช็คเอาท์ก่อนเที่ยง', hasOptions: false, cost: 0 },
             {
                 id: 'boat_back', date: '2026-10-25', time: '13:00',
@@ -187,9 +190,9 @@
                     { id: 'optB', label: 'เรือเฟอร์รี่ เหมา (15 นาที)', cost: 2100, desc: '' }
                 ]
             },
-            { id: 12, date: '2026-10-25', time: '14:00', name: 'เข้า Pool Villa ชลบุรี', desc: 'ยังไม่มีแคนดิเดทที่พัก (ตีงบไว้ก่อน)', hasOptions: false, cost: 6800 },
-            { id: 13, date: '2026-10-25', time: '15:00', name: 'ฟรีสไตล์', desc: 'คาเฟ่ชลบุรี/บางแสน/เดินห้าง เรื่องของท่าน', hasOptions: false, cost: 0 },
-            { id: 14, date: '2026-10-25', time: '18:00', name: 'มื้อใหญ่กับเพื่อนก่อนกลับ', desc: '', hasOptions: false, cost: 2600 },
+            { id: 12, date: '2026-10-25', time: '14:00', name: 'เข้า Pool Villa บางแสนวอนนภา', desc: 'ยังไม่มีแคนดิเดทที่พัก (ตีงบไว้ก่อน)', hasOptions: false, cost: 6800 },
+            { id: 13, date: '2026-10-25', time: '15:00', name: 'ตัวเลือกหลังจากนี้มีมากมาย ', desc: 'ท่านจะไปคาเฟ่ชลบุรี ไปตลาดหาซื้อไรกิน ไปเล่นน้ำบางแสน หรือไปเดินห้างก็เรื่องของท่าน', hasOptions: false, cost: 0 },
+            { id: 14, date: '2026-10-25', time: '18:00', name: 'ไม่ว่าท่านจะไปไหน กลับมาหาอะไรทานมื้อใหญ่กับเพื่อน', desc: '', hasOptions: false, cost: 3100 },
             {
                 id: 'trip_back', date: '2026-10-26', time: '10:30',
                 name: 'ขากลับ: กลับพิษณุโลก',
@@ -198,7 +201,7 @@
                 selectedOption: 'optA',
                 syncGroup: 'transport_main', // Sync กับขาไป
                 options: [
-                    { id: 'optA', label: 'Plan A: ขับรถส่วนตัว', cost: 0, desc: 'ค่าใช้จ่ายรวมในขามาแล้ว' },
+                    { id: 'optA', label: 'Plan A: ขับรถส่วนตัว', cost: 2600, desc: 'ค่าใช้จ่ายรวมในขามาแล้ว' },
                     { id: 'optB', label: 'Plan B: นั่งรถไฟ/รถตู้', cost: 460, desc: 'ค่าเดินทางกลับ' }
                 ]
             }
@@ -337,7 +340,7 @@
                         {/* Header */}
                         <div className="glass-panel p-10 text-center animate-slide-up border-t border-l border-white/60 relative overflow-hidden">
                             <div className="absolute top-0 right-0 p-6 opacity-20"><i className="fa-solid fa-anchor text-8xl"></i></div>
-                            <h1 className="text-4xl md:text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-700 to-indigo-700 mb-4 tracking-tight drop-shadow-sm">🌴 ทริปเดือดเกาะสีชัง 🌊</h1>
+                            <h1 className="text-4xl md:text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-700 to-indigo-700 mb-4 tracking-tight drop-shadow-sm">🌴 ทริปล่มแน่นอนเกาะสีชัง 🌊</h1>
                             <p className="text-slate-600 font-medium text-lg">พิษณุโลก ➔ เกาะสีชัง ➔ พูลวิลล่าชลบุรี (24-26 ต.ค. 2026)</p>
                         </div>
 
