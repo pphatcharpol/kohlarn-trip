@@ -160,7 +160,7 @@
                 syncGroup: 'transport_main',
                 options: [
                     { id: 'optA', label: 'Plan A: ขับรถส่วนตัว', cost: 3100, desc: 'น้ำมันไป (2คัน) 2,600 + ที่จอดรถ1คืน 500 (2คัน)' },
-                    { id: 'optB', label: 'Plan B: นั่งรถไฟ', cost: 460, desc: 'ไปเจอหัวลำโพง ขบวน 283 (260฿) + ต่อสองแถว (200฿)' }
+                    { id: 'optB', label: 'Plan B: นั่งรถไฟ', cost: 460, desc: 'ไปเจอหัวลำโพง ไปรถขบวน283 รถออก 6.50 น. เพื่อไปถึงสถานีเขาพระบาทตอน 10.06 น. แล้วต่อสองแถวไปท่าเรือเกาะลอย (260฿/8คน) + ต่อสองแถว (200฿/8คน)' }
                 ]
             },
             {
@@ -232,7 +232,7 @@
             },
             { id: 12, date: '2026-10-25', time: '14:00', name: 'เข้า Pool Villa บางแสนวอนนภา', desc: 'ยังไม่มีแคนดิเดทที่พัก (ตีงบไว้ก่อน)', hasOptions: false, cost: 6800 },
             { id: 13, date: '2026-10-25', time: '15:00', name: 'ตัวเลือกหลังจากนี้มีมากมาย ', desc: 'ท่านจะไปคาเฟ่ชลบุรี ไปตลาดหาซื้อไรกิน ไปเล่นน้ำบางแสน หรือไปเดินห้างก็เรื่องของท่าน', hasOptions: false, cost: 0 },
-            { id: 14, date: '2026-10-25', time: '18:00', name: 'ไม่ว่าท่านจะไปไหน กลับมาหาอะไรทานมื้อใหญ่กับเพื่อน', desc: '', hasOptions: false, cost: 3100 },
+            { id: 14, date: '2026-10-25', time: '18:00', name: 'ไม่ว่าท่านจะไปไหน กลับมาหาอะไรทานมื้อใหญ่กับเพื่อนด้วยอีสัส', desc: '', hasOptions: false, cost: 3100 },
             {
                 id: 'trip_back', date: '2026-10-26', time: '10:30',
                 name: 'ขากลับ: กลับพิษณุโลก',
@@ -241,8 +241,8 @@
                 selectedOption: 'optA',
                 syncGroup: 'transport_main', // Sync กับขาไป
                 options: [
-                    { id: 'optA', label: 'Plan A: ขับรถส่วนตัว', cost: 2600, desc: 'ค่าใช้จ่ายรวมในขามาแล้ว' },
-                    { id: 'optB', label: 'Plan B: นั่งรถไฟ/รถตู้', cost: 460, desc: 'ค่าเดินทางกลับ' }
+                    { id: 'optA', label: 'Plan A: ขับรถส่วนตัว', cost: 2600, desc: 'เฉพาะค่าน้ำมัน' },
+                    { id: 'optB', label: 'Plan B: นั่งรถไฟ/สองแถว', cost: 460, desc: 'ค่าเดินทางกลับ' }
                 ]
             }
         ];
@@ -393,7 +393,7 @@
                             <div className="lg:col-span-4 space-y-6">
                                 <div className="glass-panel p-6 animate-slide-up hover:border-white/80 hover:shadow-lg transition-all" style={{animationDelay: '0.1s'}}>
                                     <div className="flex justify-between items-center mb-6 pb-4 border-b border-white/40">
-                                        <h2 className="text-xl font-bold text-slate-800"><i className="fa-solid fa-users text-blue-500 mr-2"></i> สมาชิก ({members.length})</h2>
+                                        <h2 className="text-xl font-bold text-slate-800"><i className="fa-solid fa-users text-blue-500 mr-2"></i> พวกตัวดีที่โดนหลอก ({members.length})</h2>
                                         <button onClick={()=>toggleModal('members')} className="glass-card hover:bg-white text-slate-700 px-4 py-2 rounded-xl text-sm font-semibold transition-all shadow-sm hover:shadow-md"><i className="fa-solid fa-pen"></i> แก้ไข</button>
                                     </div>
                                     <div className="flex flex-wrap gap-2">
