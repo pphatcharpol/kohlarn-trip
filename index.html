@@ -32,19 +32,17 @@
 
     <style>
         body { 
-    background-color: #f1f5f9; 
-    color: #1e293b; 
-    margin: 0; 
-    min-height: 100vh; 
-    overflow-x: hidden;
-    padding-bottom: 120px; /* เพิ่มระยะเว้นว่างด้านล่างกัน Sticky Bar บัง */
-}
+            background-color: #f1f5f9; 
+            color: #1e293b; 
+            margin: 0; 
+            min-height: 100vh; 
+            overflow-x: hidden;
+            padding-bottom: 120px; /* ระยะเว้นเผื่อ Sticky Bar สำหรับ Desktop */
+        }
 
-@media (max-width: 768px) {
-    body {
-        padding-bottom: 150px; /* บนมือถือบาร์อาจจะใหญ่กว่า ให้เผื่อที่เยอะขึ้น */
-    }
-}
+        @media (max-width: 768px) {
+            body { padding-bottom: 110px; /* ระยะเว้นเผื่อ Sticky Bar สำหรับ Mobile */ }
+        }
         
         /* 1. Liquid Background Animations */
         .bg-mesh {
@@ -73,13 +71,14 @@
             border: 1px solid rgba(255, 255, 255, 0.7);
             border-radius: 28px;
             box-shadow: 
-                0 4px 6px -1px rgba(0, 0, 0, 0.05), 
-                0 2px 4px -1px rgba(0, 0, 0, 0.03),
+                0 10px 25px -5px rgba(0, 0, 0, 0.05), 
+                0 8px 10px -6px rgba(0, 0, 0, 0.02),
                 inset 0 1px 0 rgba(255, 255, 255, 0.5);
+            transition: all 0.3s ease;
         }
 
         .glass-card {
-            background: rgba(255, 255, 255, 0.5);
+            background: rgba(255, 255, 255, 0.6);
             backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
             border: 1px solid rgba(255, 255, 255, 0.8);
             border-radius: 20px;
@@ -88,25 +87,52 @@
         /* Interactive Options */
         .option-label { cursor: pointer; display: block; height: 100%; }
         .option-input:checked + .glass-card {
-            background: rgba(239, 246, 255, 0.7);
+            background: rgba(239, 246, 255, 0.85);
             border-color: #3b82f6;
-            box-shadow: 0 10px 25px -5px rgba(59, 130, 246, 0.2), inset 0 0 0 1px #3b82f6;
-            transform: translateY(-2px);
+            box-shadow: 0 12px 25px -5px rgba(59, 130, 246, 0.25), inset 0 0 0 2px #3b82f6;
+            transform: translateY(-3px);
         }
         .option-input:checked + .glass-card .check-icon { transform: scale(1); opacity: 1; }
-        .check-icon { transform: scale(0); opacity: 0; transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1); }
+        .check-icon { transform: scale(0); opacity: 0; transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1); }
 
         /* Sticky Summary */
         .sticky-summary {
-            background: rgba(15, 23, 42, 0.75);
+            position: fixed;
+            background: rgba(15, 23, 42, 0.85);
             backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            color: white;
+            box-shadow: 0 -10px 40px rgba(0,0,0,0.25);
+            z-index: 40;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+            /* Mobile Default: Full width docked to bottom */
+            bottom: 0; left: 0; width: 100%;
+            border-radius: 30px 30px 0 0;
+            padding: 20px 24px;
+            border-top: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        @media (min-width: 768px) {
+            .sticky-summary {
+                /* Desktop: Pill shape floating at bottom right */
+                bottom: 24px; left: auto; right: 40px; width: 450px;
+                border-radius: 999px;
+                padding: 16px 32px;
+                border: 1px solid rgba(255, 255, 255, 0.15);
+            }
         }
 
         /* Animations */
         @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        .animate-slide-up { animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        .animate-slide-up { animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        
+        /* Modal Backdrop */
+        .modal-backdrop {
+            background: rgba(15, 23, 42, 0.5);
+            backdrop-filter: blur(8px);
+        }
     </style>
 </head>
 <body>
@@ -131,7 +157,7 @@
                 desc: 'ระหว่างทางจะกินข้าวเช้าข้าวเที่ยงเหี้ยอะไรก็เรื่องของพ่อมึงมีปากก็พูดสิไอ่สัส',
                 hasOptions: true,
                 selectedOption: 'optA',
-                syncGroup: 'transport_main', // ใช้สำหรับ Sync ขาไป-กลับ
+                syncGroup: 'transport_main',
                 options: [
                     { id: 'optA', label: 'Plan A: ขับรถส่วนตัว', cost: 3100, desc: 'น้ำมันไป (2คัน) 2,600 + ที่จอดรถ1คืน 500 (2คัน)' },
                     { id: 'optB', label: 'Plan B: นั่งรถไฟ', cost: 460, desc: 'ไปเจอหัวลำโพง ขบวน 283 (260฿) + ต่อสองแถว (200฿)' }
@@ -223,25 +249,34 @@
 
         // --- COMPONENTS ---
         const Modal = ({ title, onClose, children }) => (
-    <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-md z-50 flex items-center justify-center p-4">
-        <div className="glass-panel p-6 w-full max-w-lg shadow-2xl animate-slide-up max-h-[90vh] overflow-y-auto border-white/80">
-            <div className="flex justify-between items-center mb-6">
-                <h3 className="text-xl font-bold text-slate-800">{title}</h3>
-                {/* ปุ่มปิด (X) ตรงนี้ครับ */}
-                <button onClick={onClose} className="text-slate-400 hover:text-slate-700 text-3xl p-2 transition-transform hover:rotate-90">&times;</button>
+            <div className="fixed inset-0 modal-backdrop z-50 flex items-center justify-center p-4 md:p-6">
+                <div className="glass-panel w-full max-w-lg shadow-2xl animate-slide-up max-h-[90vh] overflow-y-auto border border-white/80 relative bg-white/70">
+                    
+                    {/* ปุ่มปิด (X) แบบใหม่ เด่นชัด ลอยอยู่มุมขวาบน */}
+                    <button 
+                        onClick={onClose} 
+                        className="absolute top-4 right-4 w-10 h-10 flex items-center justify-center bg-slate-200/60 hover:bg-red-500 text-slate-600 hover:text-white rounded-full backdrop-blur-md transition-all duration-300 shadow-sm hover:shadow-md hover:rotate-90 z-10"
+                        aria-label="Close"
+                    >
+                        <i className="fa-solid fa-xmark text-xl"></i>
+                    </button>
+
+                    <div className="p-6 md:p-8 pt-8">
+                        <div className="mb-6 border-b border-slate-300 pb-3 pr-8">
+                            <h3 className="text-2xl font-bold text-slate-800">{title}</h3>
+                        </div>
+                        {children}
+                    </div>
+                </div>
             </div>
-            {children}
-        </div>
-    </div>
-);
+        );
 
         const App = () => {
             const [members, setMembers] = useState(initialMembers);
             const [itinerary, setItinerary] = useState(initialItinerary);
             const [modals, setModals] = useState({ members: false, plan: false });
 
-            // State สำหรับ Form เพิ่ม Plan
-            const [newPlanType, setNewPlanType] = useState('single'); // single, multiple
+            const [newPlanType, setNewPlanType] = useState('single');
             const [newOptions, setNewOptions] = useState([{ id: 'optA', label: '', cost: 0, desc: '' }]);
 
             // --- Handlers ---
@@ -249,14 +284,12 @@
                 setItinerary(prev => {
                     const changedItem = prev.find(i => i.id === itemId);
                     
-                    // Logic สำหรับ Sync Options (เช่น ขาไป-ขากลับ ต้องมาด้วยกัน)
                     if (changedItem.syncGroup) {
                         return prev.map(item => 
                             item.syncGroup === changedItem.syncGroup ? { ...item, selectedOption: optionId } : item
                         );
                     }
                     
-                    // อัปเดตปกติ
                     return prev.map(item => item.id === itemId ? { ...item, selectedOption: optionId } : item);
                 });
             };
@@ -264,19 +297,16 @@
             const toggleModal = (key) => {
                 setModals(prev => ({ ...prev, [key]: !prev[key] }));
                 if(key === 'plan' && !modals.plan) {
-                    // Reset form state when opening
                     setNewPlanType('single');
                     setNewOptions([{ id: 'optA', label: '', cost: 0, desc: '' }]);
                 }
             };
 
-            // CRUD Members
             const addMember = (e) => { e.preventDefault(); const n = e.target.name.value.trim(); if(n){ setMembers([...members, {id: Date.now(), name: n}]); e.target.reset(); }};
             const removeMember = (id) => setMembers(members.filter(m => m.id !== id));
 
-            // CRUD Plan
             const handleAddOptionField = () => {
-                const nextChar = String.fromCharCode(65 + newOptions.length); // A, B, C...
+                const nextChar = String.fromCharCode(65 + newOptions.length);
                 setNewOptions([...newOptions, { id: `opt${nextChar}`, label: '', cost: 0, desc: '' }]);
             };
 
@@ -289,7 +319,6 @@
             const removeOptionField = (index) => {
                 if(newOptions.length > 1) {
                     const updated = newOptions.filter((_, i) => i !== index);
-                    // Re-index IDs (optA, optB...)
                     const reIndexed = updated.map((opt, i) => ({ ...opt, id: `opt${String.fromCharCode(65 + i)}` }));
                     setNewOptions(reIndexed);
                 }
@@ -312,8 +341,7 @@
                     newItem.cost = parseFloat(fd.get('cost') || 0);
                 } else {
                     newItem.hasOptions = true;
-                    newItem.selectedOption = 'optA'; // Default selection
-                    // Filter empty options
+                    newItem.selectedOption = 'optA';
                     newItem.options = newOptions.filter(opt => opt.label.trim() !== '').map(opt => ({
                         ...opt, 
                         cost: parseFloat(opt.cost || 0),
@@ -349,67 +377,68 @@
             const formatDate = (dateStr) => new Date(dateStr).toLocaleDateString('th-TH', { day: 'numeric', month: 'short', year: 'numeric' });
 
             return (
-                <div className="min-h-screen p-4 md:p-8 font-sans">
+                <div className="p-4 md:p-8 font-sans">
                     <div className="max-w-6xl mx-auto space-y-8">
                         
                         {/* Header */}
-                        <div className="glass-panel p-10 text-center animate-slide-up border-t border-l border-white/60 relative overflow-hidden">
-                            <div className="absolute top-0 right-0 p-6 opacity-20"><i className="fa-solid fa-anchor text-8xl"></i></div>
-                            <h1 className="text-4xl md:text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-700 to-indigo-700 mb-4 tracking-tight drop-shadow-sm">🌴 ทริปล่มแน่นอน เกาะสีชัง 🌊</h1>
-                            <p className="text-slate-600 font-medium text-lg">พิษณุโลก ➔ เกาะสีชัง ➔ พูลวิลล่า (24-26 ต.ค. กูมั่ววัน)</p>
+                        <div className="glass-panel p-8 md:p-12 text-center animate-slide-up border-t border-l border-white/60 relative overflow-hidden group hover:shadow-xl hover:border-white/80 transition-all">
+                            <div className="absolute top-0 right-0 p-6 opacity-20 transition-transform duration-700 group-hover:rotate-12 group-hover:scale-110"><i className="fa-solid fa-anchor text-8xl md:text-9xl text-indigo-400"></i></div>
+                            <h1 className="text-4xl md:text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-700 to-indigo-700 mb-4 tracking-tight drop-shadow-sm relative z-10">🌴 ทริปล่มแน่นอน เกาะสีชัง 🌊</h1>
+                            <p className="text-slate-700 font-semibold text-base md:text-lg relative z-10 bg-white/40 inline-block px-4 py-1 rounded-full shadow-sm backdrop-blur-sm">พิษณุโลก ➔ เกาะสีชัง ➔ พูลวิลล่า (24-26 ต.ค. กูมั่ววัน)</p>
                         </div>
 
                         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
                             
                             {/* Left Column */}
                             <div className="lg:col-span-4 space-y-6">
-                                <div className="glass-panel p-6 animate-slide-up" style={{animationDelay: '0.1s'}}>
+                                <div className="glass-panel p-6 animate-slide-up hover:border-white/80 hover:shadow-lg transition-all" style={{animationDelay: '0.1s'}}>
                                     <div className="flex justify-between items-center mb-6 pb-4 border-b border-white/40">
                                         <h2 className="text-xl font-bold text-slate-800"><i className="fa-solid fa-users text-blue-500 mr-2"></i> สมาชิก ({members.length})</h2>
-                                        <button onClick={()=>toggleModal('members')} className="glass-card hover:bg-white/80 text-slate-700 px-4 py-2 rounded-xl text-sm font-semibold transition-all"><i className="fa-solid fa-pen"></i> แก้ไข</button>
+                                        <button onClick={()=>toggleModal('members')} className="glass-card hover:bg-white text-slate-700 px-4 py-2 rounded-xl text-sm font-semibold transition-all shadow-sm hover:shadow-md"><i className="fa-solid fa-pen"></i> แก้ไข</button>
                                     </div>
                                     <div className="flex flex-wrap gap-2">
                                         {members.map(m => (
-                                            <span key={m.id} className="glass-card px-4 py-2 rounded-full text-slate-800 font-medium text-sm border-white/60">{m.name}</span>
+                                            <span key={m.id} className="glass-card px-4 py-2 rounded-full text-slate-800 font-medium text-sm border-white/60 shadow-sm">{m.name}</span>
                                         ))}
                                     </div>
                                 </div>
                             </div>
 
                             {/* Right Column */}
-                            <div className="lg:col-span-8 glass-panel p-6 md:p-8 animate-slide-up" style={{animationDelay: '0.15s'}}>
+                            <div className="lg:col-span-8 glass-panel p-4 md:p-8 animate-slide-up hover:border-white/80 hover:shadow-lg transition-all" style={{animationDelay: '0.15s'}}>
                                 <div className="flex justify-between items-center mb-8 pb-4 border-b border-white/40">
                                     <h2 className="text-2xl font-bold text-slate-800"><i className="fa-solid fa-map-location-dot text-indigo-500 mr-3"></i> แพลน & ค่าใช้จ่าย</h2>
-                                    <button onClick={()=>toggleModal('plan')} className="bg-indigo-600/90 hover:bg-indigo-700 text-white px-5 py-2.5 rounded-xl text-sm font-semibold shadow-lg shadow-indigo-200 transition-all"><i className="fa-solid fa-plus mr-1"></i> เพิ่มแพลน</button>
+                                    <button onClick={()=>toggleModal('plan')} className="bg-indigo-600/90 hover:bg-indigo-700 text-white px-5 py-2.5 rounded-xl text-sm font-semibold shadow-lg shadow-indigo-200 transition-all hover:-translate-y-1"><i className="fa-solid fa-plus mr-1"></i> เพิ่มแพลน</button>
                                 </div>
 
                                 <div className="space-y-12">
                                     {Object.keys(groupedItinerary).map(date => (
                                         <div key={date}>
-                                            <h3 className="inline-flex items-center bg-slate-800/90 backdrop-blur-md text-white px-5 py-2 rounded-full text-sm font-bold mb-8 shadow-md">
+                                            <h3 className="inline-flex items-center bg-slate-800/90 backdrop-blur-md text-white px-5 py-2.5 rounded-full text-sm font-bold mb-8 shadow-md">
                                                 <i className="fa-regular fa-calendar mr-2"></i>{formatDate(date)}
                                             </h3>
                                             
-                                            <div className="border-l-2 border-indigo-200/50 ml-5 pl-8 space-y-10 relative">
+                                            <div className="border-l-[3px] border-indigo-200/60 ml-4 md:ml-5 pl-6 md:pl-8 space-y-10 relative">
                                                 {groupedItinerary[date].map(item => (
                                                     <div key={item.id} className="relative group">
-                                                        <div className="absolute -left-[41px] top-1 w-5 h-5 bg-indigo-500 rounded-full border-[5px] border-[#f1f5f9] shadow-sm group-hover:scale-125 transition-transform"></div>
+                                                        <div className="absolute -left-[35px] md:-left-[43px] top-1 w-5 h-5 bg-indigo-500 rounded-full border-[4px] border-[#f1f5f9] shadow-sm group-hover:scale-125 group-hover:bg-blue-400 transition-all duration-300"></div>
                                                         
                                                         <div className="flex flex-col md:flex-row md:justify-between md:items-start gap-2 mb-2">
-                                                            <div>
+                                                            <div className="pr-6">
                                                                 <span className="font-extrabold text-indigo-600 mr-3">{item.time}</span>
                                                                 <span className="text-lg font-bold text-slate-800">{item.name}</span>
                                                             </div>
-                                                            {!item.hasOptions && item.cost > 0 && (
-                                                                <span className="bg-emerald-100/80 text-emerald-800 px-3 py-1 rounded-lg text-sm font-bold border border-emerald-200">฿{item.cost.toLocaleString()}</span>
-                                                            )}
-                                                            {/* Delete Button for custom plans */}
-                                                            {item.id.toString().startsWith('custom_') && (
-                                                                <button onClick={() => removePlan(item.id)} className="text-red-400 hover:text-red-600 ml-2 text-sm opacity-0 group-hover:opacity-100 transition-opacity"><i className="fa-solid fa-trash"></i></button>
-                                                            )}
+                                                            <div className="flex items-center gap-3">
+                                                                {!item.hasOptions && item.cost > 0 && (
+                                                                    <span className="bg-emerald-100/90 text-emerald-800 px-3 py-1 rounded-lg text-sm font-bold border border-emerald-200 shadow-sm">฿{item.cost.toLocaleString()}</span>
+                                                                )}
+                                                                {item.id.toString().startsWith('custom_') && (
+                                                                    <button onClick={() => removePlan(item.id)} className="text-red-400 hover:text-red-600 hover:bg-red-50 p-2 rounded-lg text-sm opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-all"><i className="fa-solid fa-trash"></i></button>
+                                                                )}
+                                                            </div>
                                                         </div>
                                                         
-                                                        {item.desc && <p className="text-slate-500 text-sm mb-4 leading-relaxed">"{item.desc}"</p>}
+                                                        {item.desc && <p className="text-slate-500 text-sm mb-4 leading-relaxed bg-white/30 inline-block px-3 py-1 rounded-lg">"{item.desc}"</p>}
 
                                                         {item.hasOptions && (
                                                             <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-4">
@@ -419,14 +448,14 @@
                                                                         <label key={opt.id} className="option-label">
                                                                             <input type="radio" name={`choice-${item.id}`} className="hidden option-input" 
                                                                                    checked={isSelected} onChange={() => handleOptionSelect(item.id, opt.id)} />
-                                                                            <div className="glass-card p-4 transition-all duration-300 flex justify-between items-center h-full group/card hover:bg-white/70 border-white/60">
-                                                                                <div className="pr-2">
+                                                                            <div className="glass-card p-4 transition-all duration-300 flex justify-between items-center h-full group/card hover:bg-white hover:border-indigo-300 border-white/60 shadow-sm hover:shadow-md">
+                                                                                <div className="pr-3">
                                                                                     <div className={`font-bold ${isSelected ? 'text-blue-700' : 'text-slate-700'}`}>{opt.label}</div>
-                                                                                    {opt.desc && <div className="text-xs text-slate-500 mt-1">{opt.desc}</div>}
+                                                                                    {opt.desc && <div className="text-xs text-slate-500 mt-1 leading-snug">{opt.desc}</div>}
                                                                                 </div>
-                                                                                <div className="text-right flex-shrink-0 flex flex-col items-end">
-                                                                                    <div className={`font-bold ${isSelected ? 'text-emerald-600' : 'text-slate-600'}`}>฿{opt.cost.toLocaleString()}</div>
-                                                                                    <i className="fa-solid fa-circle-check text-blue-500 text-xl check-icon mt-1"></i>
+                                                                                <div className="text-right flex-shrink-0 flex flex-col items-end justify-center">
+                                                                                    <div className={`font-bold ${isSelected ? 'text-emerald-600 text-lg' : 'text-slate-600'}`}>฿{opt.cost.toLocaleString()}</div>
+                                                                                    <i className="fa-solid fa-circle-check text-blue-500 text-xl check-icon mt-1 drop-shadow-sm"></i>
                                                                                 </div>
                                                                             </div>
                                                                         </label>
@@ -445,14 +474,14 @@
                     </div>
 
                     {/* STICKY TOTAL BAR */}
-                    <div className="fixed bottom-6 left-4 right-4 md:left-auto md:right-10 md:w-[450px] sticky-summary rounded-[2rem] p-5 animate-slide-up border border-white/10" style={{animationDelay: '0.3s'}}>
+                    <div className="sticky-summary animate-slide-up" style={{animationDelay: '0.3s'}}>
                         <div>
-                            <div className="text-xs text-slate-300 font-medium uppercase tracking-wider mb-1">รวมค่าใช้จ่ายทริป</div>
-                            <div className="text-3xl font-extrabold tracking-tight">฿{totalCost.toLocaleString()}</div>
+                            <div className="text-[10px] md:text-xs text-slate-300 font-medium uppercase tracking-wider mb-1">รวมค่าใช้จ่ายทริป</div>
+                            <div className="text-2xl md:text-3xl font-extrabold tracking-tight">฿{totalCost.toLocaleString()}</div>
                         </div>
-                        <div className="text-right border-l border-slate-600 pl-5">
-                            <div className="text-xs text-slate-300 font-medium uppercase tracking-wider mb-1">หาร {members.length} คน</div>
-                            <div className="text-3xl font-extrabold text-emerald-400 tracking-tight">฿{Math.ceil(costPerPerson).toLocaleString()}</div>
+                        <div className="text-right border-l border-slate-600/50 pl-4 md:pl-5">
+                            <div className="text-[10px] md:text-xs text-slate-300 font-medium uppercase tracking-wider mb-1">หาร {members.length} คน</div>
+                            <div className="text-2xl md:text-3xl font-extrabold text-emerald-400 tracking-tight">฿{Math.ceil(costPerPerson).toLocaleString()}</div>
                         </div>
                     </div>
 
@@ -460,65 +489,65 @@
                     {modals.members && (
                         <Modal title="จัดการสมาชิก" onClose={() => toggleModal('members')}>
                             <form onSubmit={addMember} className="flex gap-2 mb-6">
-                                <input name="name" type="text" placeholder="ชื่อไอ่เหี้ยสักคน..." required className="flex-1 px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-indigo-400 bg-white/70" />
-                                <button type="submit" className="bg-indigo-600 text-white px-6 py-3 rounded-xl font-bold shadow-md hover:bg-indigo-700 transition-colors">เพิ่ม</button>
+                                <input name="name" type="text" placeholder="ชื่อไอ่เหี้ยสักคน..." required className="flex-1 px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-indigo-400 bg-slate-50/50 focus:bg-white transition-colors shadow-inner" />
+                                <button type="submit" className="bg-indigo-600 text-white px-6 py-3 rounded-xl font-bold shadow-md hover:bg-indigo-700 hover:-translate-y-0.5 transition-all">เพิ่ม</button>
                             </form>
                             <div className="flex flex-col gap-2">
                                 {members.map(m => (
-                                    <div key={m.id} className="flex justify-between items-center glass-card p-3 px-4 border-white/50">
+                                    <div key={m.id} className="flex justify-between items-center bg-slate-50/70 p-3 px-4 rounded-xl border border-slate-200">
                                         <span className="font-semibold text-slate-700">{m.name}</span>
-                                        <button onClick={() => removeMember(m.id)} className="text-red-400 hover:text-red-600 bg-red-50 p-2 rounded-lg transition-colors"><i className="fa-solid fa-trash"></i></button>
+                                        <button onClick={() => removeMember(m.id)} className="text-red-400 hover:text-red-600 bg-white hover:bg-red-50 p-2 rounded-lg transition-colors shadow-sm"><i className="fa-solid fa-trash"></i></button>
                                     </div>
                                 ))}
                             </div>
                         </Modal>
                     )}
                     
-                    {/* MODAL: Plan CRUD with Multiple Options */}
+                    {/* MODAL: Plan CRUD */}
                     {modals.plan && (
                         <Modal title="เพิ่มแพลนยิบย่อย" onClose={() => toggleModal('plan')}>
                             <form onSubmit={submitNewPlan} className="flex flex-col gap-4">
                                 <div className="flex gap-3">
-                                    <div className="flex-1"><label className="text-xs font-semibold text-slate-500 mb-1 block">วันที่</label><input name="date" type="date" required defaultValue="2026-10-24" className="w-full px-4 py-2 rounded-xl border border-slate-200 focus:outline-none bg-white/70" /></div>
-                                    <div className="flex-1"><label className="text-xs font-semibold text-slate-500 mb-1 block">เวลา</label><input name="time" type="time" required className="w-full px-4 py-2 rounded-xl border border-slate-200 focus:outline-none bg-white/70" /></div>
+                                    <div className="flex-1"><label className="text-xs font-semibold text-slate-500 mb-1 block">วันที่</label><input name="date" type="date" required defaultValue="2026-10-24" className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:border-indigo-400 bg-slate-50/50" /></div>
+                                    <div className="flex-1"><label className="text-xs font-semibold text-slate-500 mb-1 block">เวลา</label><input name="time" type="time" required className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:border-indigo-400 bg-slate-50/50" /></div>
                                 </div>
-                                <div><input name="name" type="text" placeholder="ชื่อกิจกรรม / สถานที่" required className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none bg-white/70 font-semibold" /></div>
-                                <div><input name="desc" type="text" placeholder="หมายเหตุ / คำด่า (ไม่บังคับ)" className="w-full px-4 py-2 rounded-xl border border-slate-200 focus:outline-none bg-white/70 text-sm" /></div>
+                                <div><input name="name" type="text" placeholder="ชื่อกิจกรรม / สถานที่" required className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-indigo-400 bg-slate-50/50 font-semibold shadow-inner" /></div>
+                                <div><input name="desc" type="text" placeholder="หมายเหตุ / คำด่า (ไม่บังคับ)" className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:border-indigo-400 bg-slate-50/50 text-sm" /></div>
 
                                 {/* Plan Type Switcher */}
-                                <div className="bg-slate-100/50 p-1 rounded-xl flex gap-1 mt-2">
-                                    <button type="button" onClick={()=>setNewPlanType('single')} className={`flex-1 py-2 rounded-lg text-sm font-semibold transition-all ${newPlanType === 'single' ? 'bg-white shadow-sm text-indigo-600' : 'text-slate-500'}`}>ราคาเดียวตายตัว</button>
-                                    <button type="button" onClick={()=>setNewPlanType('multiple')} className={`flex-1 py-2 rounded-lg text-sm font-semibold transition-all ${newPlanType === 'multiple' ? 'bg-white shadow-sm text-indigo-600' : 'text-slate-500'}`}>มีหลายตัวเลือก (Plan A, B...)</button>
+                                <div className="bg-slate-100 p-1.5 rounded-xl flex gap-1 mt-2">
+                                    <button type="button" onClick={()=>setNewPlanType('single')} className={`flex-1 py-2 rounded-lg text-sm font-semibold transition-all ${newPlanType === 'single' ? 'bg-white shadow text-indigo-600' : 'text-slate-500 hover:text-slate-700'}`}>ราคาเดียวตายตัว</button>
+                                    <button type="button" onClick={()=>setNewPlanType('multiple')} className={`flex-1 py-2 rounded-lg text-sm font-semibold transition-all ${newPlanType === 'multiple' ? 'bg-white shadow text-indigo-600' : 'text-slate-500 hover:text-slate-700'}`}>มีหลายตัวเลือก (Plan A, B...)</button>
                                 </div>
 
                                 {/* Dynamic Fields based on Type */}
                                 {newPlanType === 'single' ? (
-                                    <div className="glass-card p-4 border-dashed border-2 border-slate-200 mt-2">
+                                    <div className="bg-slate-50/50 p-4 rounded-xl border-dashed border-2 border-slate-300 mt-2">
                                         <label className="text-xs font-semibold text-slate-500 mb-1 block">ค่าใช้จ่ายรวม (บาท)</label>
-                                        <input name="cost" type="number" placeholder="ใส่ 0 ถ้าไม่มีค่าใช้จ่าย" defaultValue="0" className="w-full px-4 py-2 rounded-xl border border-slate-200 focus:outline-none bg-white" />
+                                        <input name="cost" type="number" placeholder="ใส่ 0 ถ้าไม่มีค่าใช้จ่าย" defaultValue="0" className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:border-indigo-400 bg-white" />
                                     </div>
                                 ) : (
-                                    <div className="space-y-3 mt-2 bg-slate-50/50 p-4 rounded-xl border border-slate-200">
+                                    <div className="space-y-3 mt-2 bg-slate-50/80 p-4 rounded-xl border border-slate-200">
                                         <p className="text-xs font-semibold text-slate-500">กำหนดตัวเลือก (เพื่อเปรียบเทียบราคา)</p>
                                         {newOptions.map((opt, idx) => (
-                                            <div key={idx} className="flex gap-2 items-start bg-white p-3 rounded-xl border border-slate-200 relative group">
-                                                <div className="flex-1 space-y-2">
-                                                    <input type="text" placeholder={`ชื่อตัวเลือก (เช่น Plan ${String.fromCharCode(65 + idx)})`} value={opt.label} onChange={(e) => handleOptionChange(idx, 'label', e.target.value)} required className="w-full px-3 py-1.5 rounded-lg border border-slate-200 text-sm focus:outline-none" />
+                                            <div key={idx} className="flex gap-2 items-start bg-white p-3.5 rounded-xl border border-slate-200 shadow-sm relative group">
+                                                <div className="flex-1 space-y-2.5">
+                                                    <input type="text" placeholder={`ชื่อตัวเลือก (เช่น Plan ${String.fromCharCode(65 + idx)})`} value={opt.label} onChange={(e) => handleOptionChange(idx, 'label', e.target.value)} required className="w-full px-3 py-2 rounded-lg border border-slate-200 text-sm focus:outline-none focus:border-indigo-400" />
                                                     <div className="flex gap-2">
-                                                        <input type="number" placeholder="ราคา (บาท)" value={opt.cost || ''} onChange={(e) => handleOptionChange(idx, 'cost', e.target.value)} className="w-1/3 px-3 py-1.5 rounded-lg border border-slate-200 text-sm focus:outline-none" />
-                                                        <input type="text" placeholder="รายละเอียดเสริม" value={opt.desc} onChange={(e) => handleOptionChange(idx, 'desc', e.target.value)} className="flex-1 px-3 py-1.5 rounded-lg border border-slate-200 text-sm focus:outline-none" />
+                                                        <input type="number" placeholder="ราคา (บาท)" value={opt.cost || ''} onChange={(e) => handleOptionChange(idx, 'cost', e.target.value)} className="w-1/3 px-3 py-2 rounded-lg border border-slate-200 text-sm focus:outline-none focus:border-indigo-400" />
+                                                        <input type="text" placeholder="รายละเอียดเสริม" value={opt.desc} onChange={(e) => handleOptionChange(idx, 'desc', e.target.value)} className="flex-1 px-3 py-2 rounded-lg border border-slate-200 text-sm focus:outline-none focus:border-indigo-400" />
                                                     </div>
                                                 </div>
                                                 {newOptions.length > 1 && (
-                                                    <button type="button" onClick={() => removeOptionField(idx)} className="text-red-400 hover:text-red-600 p-2"><i className="fa-solid fa-times"></i></button>
+                                                    <button type="button" onClick={() => removeOptionField(idx)} className="text-red-400 hover:text-red-600 bg-red-50 hover:bg-red-100 p-2 rounded-lg transition-colors"><i className="fa-solid fa-times"></i></button>
                                                 )}
                                             </div>
                                         ))}
-                                        <button type="button" onClick={handleAddOptionField} className="w-full py-2 border-2 border-dashed border-indigo-200 text-indigo-600 rounded-xl text-sm font-semibold hover:bg-indigo-50 transition-colors"><i className="fa-solid fa-plus mr-1"></i> เพิ่มตัวเลือกย่อย</button>
+                                        <button type="button" onClick={handleAddOptionField} className="w-full py-2.5 mt-2 border-2 border-dashed border-indigo-300 text-indigo-600 rounded-xl text-sm font-semibold hover:bg-indigo-50 hover:border-indigo-400 transition-colors"><i className="fa-solid fa-plus mr-1"></i> เพิ่มตัวเลือกย่อย</button>
                                     </div>
                                 )}
 
-                                <button type="submit" className="bg-indigo-600 text-white px-6 py-3 rounded-xl font-bold mt-4 shadow-lg shadow-indigo-200 hover:bg-indigo-700 transition-colors">บันทึกข้อมูล</button>
+                                <button type="submit" className="bg-indigo-600 text-white px-6 py-3.5 rounded-xl font-bold mt-4 shadow-lg shadow-indigo-200 hover:bg-indigo-700 hover:-translate-y-0.5 transition-all text-lg">บันทึกข้อมูล</button>
                             </form>
                         </Modal>
                     )}
