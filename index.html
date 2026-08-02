@@ -7,7 +7,7 @@
     
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Icons -->
+    <!-- Icons (FontAwesome) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -16,50 +16,48 @@
             theme: {
                 extend: {
                     fontFamily: { sans: ['Prompt', 'sans-serif'] },
-                    colors: { glass: 'rgba(255, 255, 255, 0.45)', glassDark: 'rgba(255, 255, 255, 0.65)' }
+                    colors: { glass: 'rgba(255, 255, 255, 0.45)', glassDark: 'rgba(255, 255, 255, 0.7)' }
                 }
             }
         }
     </script>
-    <!-- React & Babel -->
+    <!-- React & ReactDOM -->
     <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+    <!-- Babel -->
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
     <style>
-        body { background-color: #f0f4f8; color: #1f2937; overflow-x: hidden; scroll-behavior: smooth; }
-        
+        body { background-color: #f4f7fa; color: #1f2937; overflow-x: hidden; scroll-behavior: smooth; }
+
         /* Liquid Glass Background */
-        .glass-bg { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1; background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%); overflow: hidden; }
-        .blob { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.6; animation: moveBlobs 20s infinite alternate; }
+        .glass-bg { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1; background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%); overflow: hidden; }
+        .blob { position: absolute; border-radius: 50%; filter: blur(90px); opacity: 0.5; animation: moveBlobs 25s infinite alternate; }
         .blob-1 { top: -10%; left: -10%; width: 50vw; height: 50vw; background: #ff9a9e; }
         .blob-2 { bottom: -20%; right: -10%; width: 60vw; height: 60vw; background: #fecfef; animation-delay: -5s; }
         .blob-3 { top: 40%; left: 30%; width: 40vw; height: 40vw; background: #a1c4fd; animation-delay: -10s; }
-        @keyframes moveBlobs { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(-5vw, 10vh) scale(0.9); } }
+        @keyframes moveBlobs { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(-5vw, 10vh) scale(1.1); } }
 
-        /* Glass Components */
-        .glass-card { background: var(--glass); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.7); border-radius: 24px; box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.05); transition: transform 0.3s; }
-        .glass-card:hover { box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.08); }
-        
+        /* Glass Card Utility */
+        .glass-card { background: var(--glass); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.7); border-radius: 24px; box-shadow: 0 10px 30px 0 rgba(0, 0, 0, 0.05); }
+
         /* Animations */
         @keyframes popIn { 0% { opacity: 0; transform: scale(0.9); } 100% { opacity: 1; transform: scale(1); } }
-        .animate-pop { animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
-        @keyframes pulseGlow { 0% { box-shadow: 0 0 0 0 rgba(139, 92, 246, 0.5); } 70% { box-shadow: 0 0 0 10px rgba(139, 92, 246, 0); } 100% { box-shadow: 0 0 0 0 rgba(139, 92, 246, 0); } }
-        .active-seat { animation: pulseGlow 1.5s infinite; }
+        .animate-pop { animation: popIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        .active-seat { box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.4); animation: pulse 2s infinite; }
+        @keyframes pulse { 0%, 100% { transform: scale(1.05); } 50% { transform: scale(1); } }
 
-        /* Winding Path Timeline CSS (Zigzag) */
-        .wavy-timeline { position: relative; padding-top: 2rem; padding-bottom: 2rem; }
+        /* Winding Path Timeline CSS */
+        .wavy-timeline { position: relative; padding-bottom: 2rem; }
         .wavy-timeline::before {
-            content: ''; position: absolute; top: 0; bottom: 0; left: 50%; transform: translateX(-50%); width: 8px;
-            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="8" height="200" viewBox="0 0 8 200"><path d="M4,0 C-15,50 23,150 4,200" fill="none" stroke="%2394a3b8" stroke-width="4" stroke-dasharray="8,8" /></svg>') repeat-y;
-            z-index: 0; opacity: 0.6;
+            content: ''; position: absolute; top: 0; bottom: 0; left: 50%; transform: translateX(-50%); width: 6px;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="6" height="150" viewBox="0 0 6 150"><path d="M3,0 Q-15,37.5 3,75 T3,150" fill="none" stroke="%23cbd5e1" stroke-width="3" stroke-dasharray="8,8" /></svg>') repeat-y;
+            z-index: 0; opacity: 0.8;
         }
-        @media (max-width: 768px) { .wavy-timeline::before { left: 24px; } }
-
-        /* Scrollbar */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.15); border-radius: 10px; }
+        @media (max-width: 768px) {
+            .wavy-timeline::before { left: 24px; transform: none; }
+            .mobile-left { margin-left: 50px !important; width: calc(100% - 50px) !important; justify-content: flex-start !important; }
+        }
     </style>
 </head>
 <body>
@@ -67,11 +65,13 @@
     <div id="root"></div>
 
     <script type="text/babel">
-        const { useState, useMemo } = React;
+        const { useState, useMemo, useEffect } = React;
 
+        // --- Mock Data (Koh Sichang Trip) ---
         const initialMembers = [
-            { id: 1, name: 'บิว' }, { id: 2, name: 'ต้นหอม' }, { id: 3, name: 'เบส' }, { id: 4, name: 'ที' },
-            { id: 5, name: 'ฟิว' }, { id: 6, name: 'เฟิร์ส' }, { id: 7, name: 'แอ็ค' }, { id: 8, name: 'เพื่อนคนที่ 8' }
+            { id: 1, name: 'บิว' }, { id: 2, name: 'ต้นหอม' }, { id: 3, name: 'เบส' },
+            { id: 4, name: 'ที' }, { id: 5, name: 'ฟิว' }, { id: 6, name: 'เฟิร์ส' },
+            { id: 7, name: 'แอ็ค' }, { id: 8, name: 'แฟน' }
         ];
 
         const initialCars = [
@@ -79,286 +79,180 @@
             { id: 2, name: 'รถคันที่ 2', maxSeats: 4, occupants: {} }
         ];
 
+        // Plans definition
+        const plans = [
+            { id: 'A', name: 'Plan A (รถส่วนตัว + ที่พัก Unseen)' },
+            { id: 'B', name: 'Plan B (รถไฟ + ที่พัก ปารีฮัท)' }
+        ];
+
+        // plan: 'ALL', 'A', 'B'
+        const initialJourney = [
+            { id: 1, date: '2026-10-24', time: '05:00', name: 'ออกเดินทางจากพิษณุโลก', plan: 'A', cost: 0, link: '' },
+            { id: 2, date: '2026-10-24', time: '05:30', name: 'เติมน้ำมัน หาของแดกไปด้วยอีเหี้ย', plan: 'A', cost: 2600, link: '' },
+            { id: 3, date: '2026-10-24', time: '12:30', name: 'ถึงท่าเรือเกาะลอย หาที่จอดรถ', plan: 'A', cost: 500, link: '' },
+            { id: 4, date: '2026-10-24', time: '06:50', name: 'สถานีกรุงเทพ (หัวลำโพง) ขึ้นรถไฟ', plan: 'B', cost: 260, link: '' },
+            { id: 5, date: '2026-10-24', time: '10:05', name: 'ถึงสถานีเขาพระบาท นั่งสองแถว', plan: 'B', cost: 200, link: '' }
+        ];
+
+        const initialItinerary = [
+            { id: 1, date: '2026-10-24', time: '13:00', name: 'เรือข้ามฟากธรรมดา (40 นาที)', plan: 'A', cost: 480, link: '' },
+            { id: 2, date: '2026-10-24', time: '13:00', name: 'เรือเฟอรี่ แสงประทีป (15 นาที)', plan: 'B', cost: 2100, link: '' },
+            { id: 3, date: '2026-10-24', time: '14:00', name: 'เข้าที่พัก เกาะสีชังอันซีนรีสอร์ท', plan: 'A', cost: 10000, link: '' },
+            { id: 4, date: '2026-10-24', time: '14:00', name: 'เข้าที่พัก ปารีฮัท รีสอร์ท', plan: 'B', cost: 10000, link: '' },
+            { id: 5, date: '2026-10-24', time: '14:45', name: 'คาเฟ่เรือนซาร์เลวิช', plan: 'ALL', cost: 2080, link: '' },
+            { id: 6, date: '2026-10-24', time: '15:00', name: 'ไหว้พระศาลเจ้าพ่อเขาใหญ่', plan: 'ALL', cost: 800, link: '' },
+            { id: 7, date: '2026-10-24', time: '16:30', name: 'เล่นน้ำหาดถ้ำพัง', plan: 'ALL', cost: 0, link: '' },
+            { id: 8, date: '2026-10-24', time: '18:00', name: 'กินข้าวเย็น ร้านชาวบ้านชาวเล', plan: 'A', cost: 2600, link: '' },
+            { id: 9, date: '2026-10-24', time: '18:00', name: 'กินข้าวเย็น ร้านชมตะวัน', plan: 'B', cost: 2600, link: '' },
+            { id: 10, date: '2026-10-24', time: '20:30', name: 'บาร์ เอาฟีล', plan: 'A', cost: 600, link: '' },
+            { id: 11, date: '2026-10-24', time: '20:30', name: 'เบียร์ เอาฟุบ', plan: 'B', cost: 2000, link: '' },
+            { id: 12, date: '2026-10-25', time: '07:00', name: 'เดินตลาด ถ่ายรูปถ้ำทะลุ (ถ้ามีปัญญาตื่น)', plan: 'ALL', cost: 0, link: '' },
+            { id: 13, date: '2026-10-25', time: '08:30', name: 'ข้าวเช้า', plan: 'ALL', cost: 0, link: '' },
+            { id: 14, date: '2026-10-25', time: '13:00', name: 'ออกจากท่าเรือ กลับฝั่ง (เรือธรรมดา)', plan: 'A', cost: 480, link: '' },
+            { id: 15, date: '2026-10-25', time: '13:00', name: 'ออกจากท่าเรือ กลับฝั่ง (เฟอรี่)', plan: 'B', cost: 2100, link: '' },
+            { id: 16, date: '2026-10-25', time: '14:00', name: 'เข้า Pool Villa หาดวอน', plan: 'ALL', cost: 6800, link: '' },
+            { id: 17, date: '2026-10-25', time: '15:00', name: 'อิสระ ไปไหนก็ไป', plan: 'ALL', cost: 0, link: '' },
+            { id: 18, date: '2026-10-25', time: '18:00', name: 'หาอะไรทานมื้อใหญ่', plan: 'ALL', cost: 2600, link: '' },
+            { id: 19, date: '2026-10-26', time: '09:30', name: 'ตื่นนอนเก็บของ', plan: 'ALL', cost: 0, link: '' },
+            { id: 20, date: '2026-10-26', time: '10:30', name: 'หาอะไรกินแล้วกลับได้แล้วไอ่เหี้ย', plan: 'ALL', cost: 0, link: '' }
+        ];
+
+        // --- Helper Functions ---
         const formatDate = (dateStr) => {
-            const options = { day: 'numeric', month: 'short', year: 'numeric' };
-            return new Date(dateStr).toLocaleDateString('th-TH', options);
+            if(!dateStr) return 'ไม่ระบุวัน';
+            return new Date(dateStr).toLocaleDateString('th-TH', { day: 'numeric', month: 'short', year: 'numeric' });
         };
+        const groupByDate = (items) => {
+            return items.reduce((acc, item) => {
+                if (!acc[item.date]) acc[item.date] = [];
+                acc[item.date].push(item);
+                return acc;
+            }, {});
+        };
+
+        // --- Reusable Modal ---
+        const Modal = ({ title, onClose, children }) => (
+            <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-pop">
+                <div className="bg-white/95 backdrop-blur-xl border border-white rounded-3xl p-6 w-full max-w-xl shadow-2xl max-h-[90vh] overflow-y-auto">
+                    <div className="flex justify-between items-center mb-6 border-b pb-3">
+                        <h3 className="text-xl font-bold text-gray-800">{title}</h3>
+                        <button onClick={onClose} className="text-gray-500 hover:text-red-500 text-3xl leading-none">&times;</button>
+                    </div>
+                    {children}
+                </div>
+            </div>
+        );
 
         const App = () => {
             // States
+            const [activePlanId, setActivePlanId] = useState('A');
             const [members, setMembers] = useState(initialMembers);
             const [cars, setCars] = useState(initialCars);
+            const [journey, setJourney] = useState(initialJourney);
+            const [itinerary, setItinerary] = useState(initialItinerary);
+            const [modals, setModals] = useState({ members: false, cars: false, journey: false, itinerary: false });
             const [activeMemberId, setActiveMemberId] = useState(null);
 
-            // 🎯 Plan Selection State (ระบบเลือกตัวเลือก)
-            const [plan, setPlan] = useState({
-                travel: 'A',    // A: รถยนต์, B: รถไฟ
-                boat: 'A',      // A: เรือธรรมดา, B: เรือเฟอรี่
-                hotel: 'unseen', // unseen, paree, novo, chawley
-                dinner1: 'chawley', // chawley, chomtawan
-                night: 'beer'    // bar, beer
-            });
+            const toggleModal = (key) => setModals(prev => ({ ...prev, [key]: !prev[key] }));
 
-            // Handlers
-            const handlePlanChange = (key, value) => setPlan(prev => ({ ...prev, [key]: value }));
+            // Filtering Data by Plan
+            const currentJourney = journey.filter(j => j.plan === 'ALL' || j.plan === activePlanId);
+            const currentItinerary = itinerary.filter(i => i.plan === 'ALL' || i.plan === activePlanId);
 
-            // คำนวณค่าใช้จ่าย และ สร้าง Timeline แบบ Real-time ตามแผนที่เลือก
-            const { itinerary, totalCost } = useMemo(() => {
-                let timeline = [];
-                let cost = 0;
+            // Calculations
+            const totalJourneyCost = currentJourney.reduce((sum, item) => sum + (item.cost || 0), 0);
+            const totalItineraryCost = currentItinerary.reduce((sum, item) => sum + (item.cost || 0), 0);
+            const grandTotal = totalJourneyCost + totalItineraryCost;
+            const costPerPerson = members.length ? Math.ceil(grandTotal / members.length) : 0;
 
-                // --- วันที่ 24/10/2026 ---
-                if (plan.travel === 'A') {
-                    timeline.push({ date: '2026-10-24', time: '05:00', title: 'ออกเดินทางจากพิษณุโลก (รถยนต์ส่วนตัว/ตู้)', desc: 'ล้อหมุน อย่าเลท', cost: 0, icon: 'fa-car' });
-                    timeline.push({ date: '2026-10-24', time: '05:30', title: 'เติมน้ำมัน หาของแดกไปด้วยอีเหี้ย', desc: 'ระหว่างทางจะกินข้าวเช้าข้าวเที่ยงเหี้ยอะไรก็เรื่องของพ่อมึง มีปากก็พูดสิไอ่สัส', cost: 2600, icon: 'fa-gas-pump' });
-                    timeline.push({ date: '2026-10-24', time: '12:30', title: 'ถึงแถวท่าเรือเกาะลอย (หาที่จอดรถ)', desc: 'ค่าจอดรถประเมิณไว้ 2 คัน', cost: 500, icon: 'fa-square-parking' });
-                    cost += 3100;
-                } else {
-                    timeline.push({ date: '2026-10-24', time: '06:50', title: 'เจอกันที่สถานีกรุงเทพ (หัวลำโพง)', desc: 'ไปรถไฟ เหี้ยอะไรไม่รู้แต่ต้องมาเจอกัน เพื่อขึ้นขบวน 283 ตอน 6.55 น.', cost: 260, icon: 'fa-train' });
-                    timeline.push({ date: '2026-10-24', time: '10:05', title: 'ถึงสถานีรถไฟ เขาพระบาท', desc: 'นั่งสองแถวเพื่อไปท่าเรือเกาะลอย', cost: 200, icon: 'fa-truck-fast' });
-                    cost += 460;
-                }
-
-                if (plan.boat === 'A') {
-                    timeline.push({ date: '2026-10-24', time: '13:00', title: 'เรือข้ามฟากธรรมดา (40 นาที)', desc: 'ออกจากท่าเรือเกาะลอยไปเกาะสีชัง', cost: 480, icon: 'fa-ship' });
-                    cost += 480;
-                } else {
-                    timeline.push({ date: '2026-10-24', time: '13:00', title: 'เรือเฟอรี่ แสงประทีป (15-20 นาที)', desc: 'เหมาลำพรีเมียม ออกจากเกาะลอยไปเกาะสีชัง', cost: 2100, icon: 'fa-ship' });
-                    cost += 2100;
-                }
-
-                const hotelCosts = { unseen: 10000, paree: 8000, novo: 9200, chawley: 12400 };
-                const hotelNames = { unseen: 'เกาะสีชังอันซีนรีสอร์ท', paree: 'ปารีฮัท รีสอร์ท', novo: 'โนโวเทล เกาะสีชัง', chawley: 'ชาวบ้านชาวเล' };
-                timeline.push({ date: '2026-10-24', time: '14:00', title: `เข้าที่พัก: ${hotelNames[plan.hotel]}`, desc: 'เดินทางถึงเกาะหารถเข้าที่พัก (นอนโง่ๆ อยู่ห้องบ้าง เหนื่อยไอ่สัส)', cost: hotelCosts[plan.hotel], icon: 'fa-bed' });
-                cost += hotelCosts[plan.hotel];
-
-                timeline.push({ date: '2026-10-24', time: '14:45', title: 'คาเฟ่เรือนซาร์เลวิช', desc: 'ไปถ่ายรูปสะพานอัษฎางค์', cost: 260, icon: 'fa-mug-hot' });
-                cost += 260;
-                timeline.push({ date: '2026-10-24', time: '15:00', title: 'ไหว้พระศาลเจ้าพ่อเขาใหญ่', desc: 'เอาฤกษ์เอาชัย', cost: 100, icon: 'fa-hands-praying' });
-                cost += 100;
-                timeline.push({ date: '2026-10-24', time: '16:30', title: 'เล่นน้ำหาดถ้ำพัง', desc: 'โดดน้ำให้ชื่นใจ', cost: 0, icon: 'fa-water' });
-                
-                const dinner1Cost = 2600;
-                const dinner1Name = plan.dinner1 === 'chawley' ? 'ร้านชาวบ้านชาวเล (กลางๆ ติดหวาน)' : 'ร้านชมตะวัน (ได้มิชลิน)';
-                timeline.push({ date: '2026-10-24', time: '18:00', title: `กินข้าวเย็น: ${dinner1Name}`, desc: 'กินข้าวเย็นบ้าง แดกแต่หญ้า', cost: dinner1Cost, icon: 'fa-utensils' });
-                cost += dinner1Cost;
-
-                const nightCost = plan.night === 'bar' ? 600 : 2000;
-                const nightName = plan.night === 'bar' ? 'บาร์ (เอาฟีล)' : 'เบียร์ (เอาฟุบ)';
-                timeline.push({ date: '2026-10-24', time: '20:30', title: `ปาร์ตี้กลางคืน: ${nightName}`, desc: 'พักผ่อนตามอัธยาศัย', cost: nightCost, icon: 'fa-beer-mug-empty' });
-                cost += nightCost;
-
-                // --- วันที่ 25/10/2026 ---
-                timeline.push({ date: '2026-10-25', time: '07:00', title: 'ตื่นเช้าถ้ามีปัญญา', desc: 'ไปเดินตลาด ถ่ายรูปถ้ำทะลุ ช่องเขาขาด (ถ้าตอแหลหน่อยจะเล่นน้ำก็เรื่องของมึง)', cost: 0, icon: 'fa-camera' });
-                timeline.push({ date: '2026-10-25', time: '08:30', title: 'ข้าวเช้า (โรงแรม/อิสระ)', desc: 'ไม่รู้โรงแรมมีให้ไหม แต่พนันว่าถ้าไม่ตื่นมีก็ไม่แดกกันแน่นอน อยากจะไปไหนก็ไป กลับมาเช็คเอาท์ก่อนเที่ยง', cost: 0, icon: 'fa-bowl-food' });
-
-                if (plan.boat === 'A') {
-                    timeline.push({ date: '2026-10-25', time: '13:00', title: 'เรือข้ามฟากธรรมดา (ขากลับ)', desc: 'เจอกันที่ท่าเรือ นั่งกลับฝั่ง', cost: 480, icon: 'fa-ship' });
-                    cost += 480;
-                } else {
-                    timeline.push({ date: '2026-10-25', time: '13:00', title: 'เรือเฟอรี่ แสงประทีป (ขากลับ)', desc: 'เจอกันที่ท่าเรือ นั่งกลับฝั่ง', cost: 2100, icon: 'fa-ship' });
-                    cost += 2100;
-                }
-
-                timeline.push({ date: '2026-10-25', time: '14:00', title: 'เดินทางไป Pool Villa หาดวอน', desc: 'เตรียมตัวปาร์ตี้รอบสอง', cost: 5600, icon: 'fa-house-swimming' });
-                cost += 5600;
-                timeline.push({ date: '2026-10-25', time: '15:00', title: 'Free Time สุดสัปดาห์', desc: 'ตัวเลือกหลังจากนี้มีมากมาย ท่านจะไปคาเฟ่ชลบุรี ไปตลาดหาซื้อไรกิน ไปเล่นน้ำบางแสน หรือไปเดินห้างก็เรื่องของท่าน', cost: 0, icon: 'fa-person-walking-luggage' });
-                timeline.push({ date: '2026-10-25', time: '18:00', title: 'มื้อใหญ่กับเพื่อน', desc: 'ไม่ว่าท่านจะไปไหน กลับมาหาอะไรทานมื้อใหญ่ด้วยกัน', cost: 2600, icon: 'fa-burger' });
-                cost += 2600;
-
-                // --- วันที่ 26/10/2026 ---
-                timeline.push({ date: '2026-10-26', time: '09:30', title: 'ตื่นนอนเก็บของ', desc: 'เช็คสัมภาระ เตรียมตัวกลับโลกความจริง', cost: 0, icon: 'fa-suitcase' });
-                timeline.push({ date: '2026-10-26', time: '10:30', title: 'หาอะไรกินแล้วเดินทางกลับ', desc: 'หาอะไรกินแล้วก็กลับได้แล้วไอ่เหี้ย (ตอนกลับเหมือนกับขามา แค่ย้อนกลับ)', cost: 0, icon: 'fa-road' });
-
-                // จัดกลุ่มตามวันที่
-                const groupedTimeline = timeline.reduce((acc, item) => {
-                    if (!acc[item.date]) acc[item.date] = [];
-                    acc[item.date].push(item);
-                    return acc;
-                }, {});
-
-                return { itinerary: groupedTimeline, totalCost: cost };
-            }, [plan]);
-
-            // Seating Handlers
-            const handlePoolClick = (id) => setActiveMemberId(activeMemberId === id ? null : id);
-            const handleSeatClick = (carId, seatIndex) => {
-                const carIndex = cars.findIndex(c => c.id === carId);
-                const newCars = [...cars];
-                if (activeMemberId) {
-                    newCars.forEach(c => { Object.keys(c.occupants).forEach(k => { if (c.occupants[k] === activeMemberId) delete c.occupants[k]; }); });
-                    newCars[carIndex].occupants = { ...newCars[carIndex].occupants, [seatIndex]: activeMemberId };
-                    setCars(newCars); setActiveMemberId(null);
-                } else if (newCars[carIndex].occupants[seatIndex]) {
-                    delete newCars[carIndex].occupants[seatIndex]; setCars(newCars);
-                }
+            // --- Handlers (CRUD) ---
+            const addMember = (e) => { e.preventDefault(); const name = e.target.name.value.trim(); if (name) { setMembers([...members, { id: Date.now(), name }]); e.target.reset(); } };
+            const removeMember = (id) => {
+                setMembers(members.filter(m => m.id !== id));
+                setCars(cars.map(car => {
+                    const newOcc = { ...car.occupants };
+                    Object.keys(newOcc).forEach(k => { if (newOcc[k] === id) delete newOcc[k]; });
+                    return { ...car, occupants: newOcc };
+                }));
             };
 
-            const seatedMemberIds = useMemo(() => {
-                const ids = new Set(); cars.forEach(car => Object.values(car.occupants).forEach(id => ids.add(id))); return ids;
-            }, [cars]);
+            const handlePoolClick = (memberId) => setActiveMemberId(activeMemberId === memberId ? null : memberId);
+            const handleSeatClick = (carId, seatIndex) => {
+                const carIndex = cars.findIndex(c => c.id === carId);
+                const car = cars[carIndex];
+                const newCars = [...cars];
+                const newOccupants = { ...car.occupants };
+
+                if (activeMemberId) {
+                    newCars.forEach(c => { Object.keys(c.occupants).forEach(k => { if (c.occupants[k] === activeMemberId) delete c.occupants[k]; }); });
+                    newOccupants[seatIndex] = activeMemberId;
+                    newCars[carIndex].occupants = newOccupants;
+                    setCars(newCars);
+                    setActiveMemberId(null);
+                } else if (car.occupants[seatIndex]) {
+                    delete newOccupants[seatIndex];
+                    newCars[carIndex].occupants = newOccupants;
+                    setCars(newCars);
+                }
+            };
+            const seatedMemberIds = useMemo(() => { const ids = new Set(); cars.forEach(c => Object.values(c.occupants).forEach(id => ids.add(id))); return ids; }, [cars]);
             const unseatedMembers = members.filter(m => !seatedMemberIds.has(m.id));
 
-            return (
-                <div className="max-w-5xl mx-auto px-4 py-12 flex flex-col gap-10">
-                    
-                    {/* Header */}
-                    <div className="glass-card p-10 text-center">
-                        <h1 className="text-4xl md:text-6xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-orange-500 to-pink-500 mb-4 animate-pop">🌴 ทริปล่มจม เกาะสีชัง 🌊</h1>
-                        <p className="text-lg text-gray-700 font-medium">พิษณุโลก ➔ ชลบุรี ➔ เกาะสีชัง (24-26 ต.ค. 2026)</p>
-                    </div>
+            const addCar = (e) => { e.preventDefault(); const n = e.target.name.value; const s = parseInt(e.target.seats.value); if (n && s) setCars([...cars, { id: Date.now(), name: n, maxSeats: s, occupants: {} }]); e.target.reset(); };
+            const removeCar = (id) => setCars(cars.filter(c => c.id !== id));
 
-                    {/* Section 1: Dashboard & Plan Selector */}
-                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 animate-pop" style={{animationDelay: '0.1s'}}>
-                        {/* Plan Configurator */}
-                        <div className="lg:col-span-2 glass-card p-6">
-                            <h2 className="text-2xl font-bold mb-4 border-b border-gray-300/50 pb-2"><i className="fa-solid fa-sliders text-blue-500 mr-2"></i> ปรับแต่งแผนการเดินทาง (Plan Selector)</h2>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div className="bg-white/50 p-3 rounded-xl">
-                                    <p className="font-semibold text-sm text-gray-600 mb-2">🚗 การเดินทางจากพิดโลก</p>
-                                    <div className="flex gap-2">
-                                        <button onClick={()=>handlePlanChange('travel', 'A')} className={`flex-1 py-2 rounded-lg font-medium text-sm transition-all ${plan.travel==='A'?'bg-blue-500 text-white shadow-md':'bg-white text-gray-600 hover:bg-gray-100'}`}>A: ขับรถ/รถตู้</button>
-                                        <button onClick={()=>handlePlanChange('travel', 'B')} className={`flex-1 py-2 rounded-lg font-medium text-sm transition-all ${plan.travel==='B'?'bg-blue-500 text-white shadow-md':'bg-white text-gray-600 hover:bg-gray-100'}`}>B: นั่งรถไฟ</button>
-                                    </div>
-                                </div>
-                                <div className="bg-white/50 p-3 rounded-xl">
-                                    <p className="font-semibold text-sm text-gray-600 mb-2">⛴️ เรือข้ามเกาะ</p>
-                                    <div className="flex gap-2">
-                                        <button onClick={()=>handlePlanChange('boat', 'A')} className={`flex-1 py-2 rounded-lg font-medium text-sm transition-all ${plan.boat==='A'?'bg-teal-500 text-white shadow-md':'bg-white text-gray-600 hover:bg-gray-100'}`}>A: ข้ามฟากปกติ</button>
-                                        <button onClick={()=>handlePlanChange('boat', 'B')} className={`flex-1 py-2 rounded-lg font-medium text-sm transition-all ${plan.boat==='B'?'bg-teal-500 text-white shadow-md':'bg-white text-gray-600 hover:bg-gray-100'}`}>B: เหมาเฟอรี่</button>
-                                    </div>
-                                </div>
-                                <div className="bg-white/50 p-3 rounded-xl md:col-span-2">
-                                    <p className="font-semibold text-sm text-gray-600 mb-2">🏨 ที่พักเกาะสีชัง</p>
-                                    <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
-                                        <button onClick={()=>handlePlanChange('hotel', 'unseen')} className={`py-2 rounded-lg font-medium text-xs transition-all ${plan.hotel==='unseen'?'bg-orange-500 text-white shadow-md':'bg-white text-gray-600 hover:bg-gray-100'}`}>อันซีนรีสอร์ท</button>
-                                        <button onClick={()=>handlePlanChange('hotel', 'paree')} className={`py-2 rounded-lg font-medium text-xs transition-all ${plan.hotel==='paree'?'bg-orange-500 text-white shadow-md':'bg-white text-gray-600 hover:bg-gray-100'}`}>ปารีฮัท</button>
-                                        <button onClick={()=>handlePlanChange('hotel', 'novo')} className={`py-2 rounded-lg font-medium text-xs transition-all ${plan.hotel==='novo'?'bg-orange-500 text-white shadow-md':'bg-white text-gray-600 hover:bg-gray-100'}`}>โนโวเทล</button>
-                                        <button onClick={()=>handlePlanChange('hotel', 'chawley')} className={`py-2 rounded-lg font-medium text-xs transition-all ${plan.hotel==='chawley'?'bg-orange-500 text-white shadow-md':'bg-white text-gray-600 hover:bg-gray-100'}`}>ชาวเล</button>
-                                    </div>
-                                </div>
-                                <div className="bg-white/50 p-3 rounded-xl">
-                                    <p className="font-semibold text-sm text-gray-600 mb-2">🦞 ร้านอาหารเย็น</p>
-                                    <div className="flex gap-2">
-                                        <button onClick={()=>handlePlanChange('dinner1', 'chawley')} className={`flex-1 py-2 rounded-lg font-medium text-sm transition-all ${plan.dinner1==='chawley'?'bg-pink-500 text-white shadow-md':'bg-white text-gray-600 hover:bg-gray-100'}`}>ชาวเล (ติดหวาน)</button>
-                                        <button onClick={()=>handlePlanChange('dinner1', 'chomtawan')} className={`flex-1 py-2 rounded-lg font-medium text-sm transition-all ${plan.dinner1==='chomtawan'?'bg-pink-500 text-white shadow-md':'bg-white text-gray-600 hover:bg-gray-100'}`}>ชมตะวัน (มิชลิน)</button>
-                                    </div>
-                                </div>
-                                <div className="bg-white/50 p-3 rounded-xl">
-                                    <p className="font-semibold text-sm text-gray-600 mb-2">🍻 ปาร์ตี้กลางคืน</p>
-                                    <div className="flex gap-2">
-                                        <button onClick={()=>handlePlanChange('night', 'bar')} className={`flex-1 py-2 rounded-lg font-medium text-sm transition-all ${plan.night==='bar'?'bg-violet-500 text-white shadow-md':'bg-white text-gray-600 hover:bg-gray-100'}`}>บาร์ (เอาฟีล)</button>
-                                        <button onClick={()=>handlePlanChange('night', 'beer')} className={`flex-1 py-2 rounded-lg font-medium text-sm transition-all ${plan.night==='beer'?'bg-violet-500 text-white shadow-md':'bg-white text-gray-600 hover:bg-gray-100'}`}>เบียร์ (เอาฟุบ)</button>
-                                    </div>
-                                </div>
-                            </div>
+            const addItem = (e, type) => {
+                e.preventDefault(); const fd = new FormData(e.target);
+                const newItem = { id: Date.now(), date: fd.get('date'), time: fd.get('time'), name: fd.get('name'), plan: fd.get('plan'), cost: parseFloat(fd.get('cost')||0), link: fd.get('link'), image: fd.get('image') };
+                const sortFunc = (a,b) => a.date.localeCompare(b.date) || a.time.localeCompare(b.time);
+                if (type === 'journey') setJourney([...journey, newItem].sort(sortFunc));
+                else setItinerary([...itinerary, newItem].sort(sortFunc));
+                e.target.reset();
+            };
+            const removeItem = (id, type) => { if(type==='journey') setJourney(journey.filter(j=>j.id!==id)); else setItinerary(itinerary.filter(i=>i.id!==id)); };
+
+            // --- UI Renderers ---
+            const renderTimelineBlock = (data, title, icon, colorClass, type) => {
+                const grouped = groupByDate(data);
+                return (
+                    <div className="glass-card p-6 animate-pop">
+                        <div className="flex justify-between items-center mb-6">
+                            <h2 className={`text-2xl font-bold ${colorClass}`}><i className={`fa-solid ${icon} mr-2`}></i> {title}</h2>
+                            <button onClick={() => toggleModal(type)} className="bg-white/70 hover:bg-white text-gray-800 px-4 py-2 rounded-xl shadow-sm text-sm font-medium transition"><i className="fa-solid fa-pen mr-1"></i> จัดการ</button>
                         </div>
 
-                        {/* Cost Summary Box */}
-                        <div className="glass-card p-6 flex flex-col justify-center items-center bg-gradient-to-br from-green-400/20 to-teal-500/20">
-                            <h2 className="text-xl font-bold mb-2"><i className="fa-solid fa-sack-dollar text-green-600 mr-2"></i> สรุปงบกองกลาง</h2>
-                            <p className="text-sm text-gray-600 text-center mb-4">อิงตามแผนตัวเลือกด้านซ้าย</p>
-                            <div className="bg-white/80 p-5 rounded-2xl w-full text-center shadow-inner mb-4">
-                                <p className="text-gray-500 font-medium">รวมทั้งหมด</p>
-                                <p className="text-3xl font-bold text-gray-800">฿{totalCost.toLocaleString()}</p>
-                            </div>
-                            <div className="bg-gradient-to-r from-green-500 to-teal-500 p-4 rounded-2xl w-full text-center shadow-lg text-white">
-                                <p className="font-medium text-green-50">หารเฉลี่ย ({members.length} คน)</p>
-                                <p className="text-3xl font-bold mt-1">฿{Math.ceil(totalCost/members.length).toLocaleString()}</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Section 2: Members & Seating */}
-                    <div className="glass-card p-8 animate-pop" style={{animationDelay: '0.2s'}}>
-                        <h2 className="text-2xl font-bold text-gray-800 mb-6 border-b border-gray-300/50 pb-2"><i className="fa-solid fa-users text-pink-500 mr-2"></i> สมาชิก & การเดินทาง</h2>
-                        
-                        {plan.travel === 'A' ? (
-                            <div>
-                                <p className="text-sm text-gray-600 mb-4 bg-white/50 p-3 rounded-xl inline-block border border-white/60">
-                                    <i className="fa-solid fa-hand-pointer mr-1"></i> <b>จัดที่นั่งรถ:</b> แตะชื่อคนด้านล่าง แล้วแตะเบาะว่างในรถ
-                                </p>
-                                <div className="mb-6 p-4 bg-white/30 rounded-2xl border border-white/50">
-                                    <h3 className="text-sm font-semibold text-gray-700 mb-3">จุดรอขึ้นรถ:</h3>
-                                    <div className="flex flex-wrap gap-2">
-                                        {unseatedMembers.map(m => (
-                                            <button key={m.id} onClick={() => handlePoolClick(m.id)}
-                                                className={`px-4 py-2 rounded-full font-medium transition-all duration-300 border ${activeMemberId === m.id ? 'bg-violet-500 text-white border-violet-600 shadow-lg transform scale-110 active-seat' : 'bg-white/80 text-gray-800 border-white hover:bg-white hover:scale-105'}`}>
-                                                {m.name}
-                                            </button>
-                                        ))}
-                                        {unseatedMembers.length === 0 && <span className="text-gray-500 text-sm italic">ขึ้นรถครบแล้วจ้า</span>}
-                                    </div>
-                                </div>
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                    {cars.map(car => (
-                                        <div key={car.id} className="bg-white/40 rounded-2xl p-5 border border-white/60 shadow-sm hover:bg-white/60 transition-colors">
-                                            <div className="text-lg font-bold text-center mb-4 border-b border-gray-300/50 pb-2">🚗 {car.name} <span className="text-sm font-normal text-gray-500">({Object.keys(car.occupants).length}/{car.maxSeats})</span></div>
-                                            <div className="grid grid-cols-2 gap-3 justify-items-center">
-                                                {Array.from({length: car.maxSeats}).map((_, idx) => {
-                                                    const occupant = members.find(m => m.id === car.occupants[idx]);
-                                                    return (
-                                                        <button key={idx} onClick={() => handleSeatClick(car.id, idx)}
-                                                            className={`w-full max-w-[120px] h-12 rounded-xl font-medium border-2 transition-all ${occupant ? 'bg-pink-200 border-pink-400 text-pink-900 shadow-sm' : 'bg-black/5 border-dashed border-gray-400/50 text-gray-400 hover:bg-black/10'}`}>
-                                                            {occupant ? occupant.name : <i className="fa-solid fa-chair opacity-50"></i>}
-                                                        </button>
-                                                    )
-                                                })}
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-                        ) : (
-                            <div className="bg-white/50 p-8 rounded-2xl border border-white/60 text-center">
-                                <i className="fa-solid fa-train text-5xl text-blue-400 mb-4"></i>
-                                <h3 className="text-xl font-bold text-gray-800">แผนเดินทางด้วยรถไฟ</h3>
-                                <p className="text-gray-600 mt-2">ไปเจอกันที่หัวลำโพงเลย ไม่ต้องจัดที่นั่งโว้ย!</p>
-                                <div className="mt-6 flex flex-wrap justify-center gap-2">
-                                    {members.map(m => <span key={m.id} className="px-3 py-1 bg-white border border-gray-200 rounded-full text-sm">{m.name}</span>)}
-                                </div>
-                            </div>
-                        )}
-                    </div>
-
-                    {/* Section 3: Winding Timeline */}
-                    <div className="glass-card p-8 pb-20 animate-pop" style={{animationDelay: '0.3s'}}>
-                        <h2 className="text-2xl font-bold text-gray-800 mb-10 text-center"><i className="fa-solid fa-route text-orange-500 mr-2"></i> แผนการเดินทาง & กิจกรรม</h2>
-                        
-                        <div className="wavy-timeline">
-                            {/* Sticky Indicator */}
-                            <div className="sticky top-1/2 left-0 md:left-1/2 transform md:-translate-x-1/2 -translate-y-1/2 z-20 w-8 h-8 pointer-events-none hidden md:flex justify-center">
-                                <div className="bg-white shadow-lg border-4 border-orange-400 rounded-full w-12 h-12 flex items-center justify-center text-xl text-orange-500 animate-bounce">
-                                    <i className="fa-solid fa-map-location-dot"></i>
+                        <div className="wavy-timeline px-2 md:px-0 mt-4">
+                            {/* Sticky Icon on Desktop */}
+                            <div className="sticky top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20 w-8 h-8 pointer-events-none hidden md:flex justify-center transition-all duration-500">
+                                <div className={`bg-white shadow-xl border-4 rounded-full w-12 h-12 flex items-center justify-center text-xl animate-bounce ${colorClass.replace('text-', 'border-')} ${colorClass}`}>
+                                    <i className={`fa-solid ${icon}`}></i>
                                 </div>
                             </div>
 
-                            {Object.keys(itinerary).map((dateKey) => (
-                                <div key={dateKey} className="mb-14 relative z-10">
-                                    <div className="flex justify-center mb-8">
-                                        <span className="px-6 py-2 rounded-full font-bold shadow-md text-white bg-gradient-to-r from-orange-400 to-pink-500">
-                                            <i className="fa-regular fa-calendar-check mr-2"></i>{formatDate(dateKey)}
+                            {Object.keys(grouped).map((dateKey) => (
+                                <div key={dateKey} className="mb-10 relative z-10">
+                                    <div className="flex justify-center mb-6">
+                                        <span className={`px-5 py-2 rounded-full font-bold shadow-md text-white ${type === 'journey' ? 'bg-blue-500' : 'bg-orange-500'}`}>
+                                            <i className="fa-regular fa-calendar mr-2"></i>{formatDate(dateKey)}
                                         </span>
                                     </div>
-                                    
-                                    <div className="flex flex-col gap-10">
-                                        {itinerary[dateKey].map((item, index) => {
-                                            const isLeft = index % 2 === 0;
+                                    <div className="flex flex-col gap-6">
+                                        {grouped[dateKey].map((item, idx) => {
+                                            const isLeft = idx % 2 === 0;
                                             return (
-                                                <div key={item.time+item.title} className={`flex flex-col md:flex-row w-full ${isLeft ? 'md:justify-start pl-12 md:pl-0' : 'md:justify-end pl-12 md:pl-0'} items-center group`}>
+                                                <div key={item.id} className={`flex flex-col md:flex-row w-full mobile-left ${isLeft ? 'md:justify-start' : 'md:justify-end'} group`}>
+                                                    {/* Mobile dot indicator */}
+                                                    <div className={`md:hidden absolute left-[21px] w-4 h-4 rounded-full border-2 bg-white z-20 ${colorClass.replace('text-', 'border-')}`}></div>
                                                     
-                                                    {/* Mobile dot */}
-                                                    <div className="md:hidden absolute left-[20px] w-4 h-4 rounded-full border-2 border-orange-400 bg-white z-20"></div>
-
-                                                    <div className={`w-full md:w-[45%] p-5 bg-white/80 backdrop-blur-md rounded-2xl shadow-sm border border-white transition-all duration-300 hover:-translate-y-2 hover:shadow-xl ${isLeft ? 'md:mr-8' : 'md:ml-8'}`}>
-                                                        <div className="flex justify-between items-start mb-2 border-b border-gray-200 pb-2">
-                                                            <div className="font-bold text-orange-600 text-lg flex items-center gap-2">
+                                                    <div className={`w-full md:w-[45%] p-5 bg-white/80 backdrop-blur-xl rounded-2xl shadow-sm border border-white transition-all duration-300 hover:-translate-y-1 hover:shadow-lg ${isLeft ? 'md:mr-8 hover:border-l-[4px] hover:border-l-blue-400' : 'md:ml-8 hover:border-r-[4px] hover:border-r-orange-400'}`}>
+                                                        <div className="flex justify-between items-start mb-2">
+                                                            <div className={`font-bold text-lg flex items-center gap-2 ${colorClass}`}>
                                                                 <i className="fa-regular fa-clock"></i> {item.time}
                                                             </div>
-                                                            {item.cost > 0 && <span className="bg-green-100 text-green-700 px-3 py-1 rounded-lg text-xs font-bold border border-green-200 shadow-sm whitespace-nowrap ml-2">฿{item.cost.toLocaleString()}</span>}
+                                                            {item.cost > 0 && <span className="bg-green-100 text-green-700 px-3 py-1 rounded-lg text-sm font-bold border border-green-200">฿{item.cost.toLocaleString()}</span>}
                                                         </div>
-                                                        <h4 className="text-lg font-bold text-gray-800 mb-1"><i className={`fa-solid ${item.icon} text-gray-400 mr-2`}></i>{item.title}</h4>
-                                                        <p className="text-sm text-gray-600">{item.desc}</p>
+                                                        <h4 className="text-lg font-bold text-gray-800 mb-2">{item.name}</h4>
+                                                        {item.image && <div className="w-full h-40 rounded-xl overflow-hidden mb-3"><img src={item.image} alt={item.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" /></div>}
                                                     </div>
                                                 </div>
                                             )
@@ -368,8 +262,152 @@
                             ))}
                         </div>
                     </div>
+                )
+            };
 
-                    <p className="text-center text-gray-500 text-sm pb-10">❤️ Made for Koh Sichang Trip (ขอให้ได้ไปจริงๆ สาธุ)</p>
+            const renderTimelineForm = (type) => (
+                <form onSubmit={(e) => addItem(e, type)} className="flex flex-col gap-3 mb-6 bg-gray-100/50 p-4 rounded-2xl">
+                    <div className="flex gap-2">
+                        <input name="date" type="date" required defaultValue="2026-10-24" className="w-1/2 px-4 py-2 rounded-xl border focus:outline-none bg-white" />
+                        <input name="time" type="time" required className="w-1/2 px-4 py-2 rounded-xl border focus:outline-none bg-white" />
+                    </div>
+                    <input name="name" type="text" placeholder="ชื่อสถานที่ / กิจกรรม" required className="px-4 py-2 rounded-xl border focus:outline-none bg-white" />
+                    <input name="cost" type="number" placeholder="ค่าใช้จ่าย (บาท) ใส่ 0 หากไม่มี" defaultValue="0" className="px-4 py-2 rounded-xl border focus:outline-none bg-white" />
+                    <select name="plan" className="px-4 py-2 rounded-xl border focus:outline-none bg-white font-medium text-violet-600">
+                        <option value="ALL">แสดงในทุกแพลน (ใช้ร่วมกัน)</option>
+                        {plans.map(p => <option key={p.id} value={p.id}>แสดงเฉพาะ {p.name}</option>)}
+                    </select>
+                    <input name="image" type="url" placeholder="URL รูปภาพ (ไม่บังคับ)" className="px-4 py-2 rounded-xl border focus:outline-none bg-white text-sm" />
+                    <button type="submit" className={`text-white px-6 py-2 rounded-xl font-bold shadow-md ${type==='journey' ? 'bg-blue-500' : 'bg-orange-500'}`}>เพิ่มข้อมูล</button>
+                </form>
+            );
+
+            return (
+                <div className="max-w-7xl mx-auto px-4 py-8 flex flex-col gap-8 relative z-10">
+                    
+                    {/* Top Header & Plan Switcher */}
+                    <div className="glass-card p-6 md:p-8 flex flex-col md:flex-row justify-between items-center gap-6 text-center md:text-left sticky top-4 z-40">
+                        <div>
+                            <h1 className="text-3xl md:text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-violet-600 to-pink-600 mb-2">🌴 ทริปล่มจม เกาะสีชัง</h1>
+                            <p className="text-gray-600 font-medium">พิษณุโลก ➔ ชลบุรี ➔ เกาะสีชัง</p>
+                        </div>
+                        <div className="bg-white/60 p-2 rounded-2xl flex flex-col sm:flex-row gap-2 shadow-inner border border-white">
+                            <span className="sm:hidden text-sm font-bold text-gray-500 mb-1">เลือกตัวเลือกแพลนเที่ยว:</span>
+                            {plans.map(plan => (
+                                <button key={plan.id} onClick={() => setActivePlanId(plan.id)}
+                                    className={`px-5 py-3 rounded-xl font-bold transition-all duration-300 ${activePlanId === plan.id ? 'bg-gradient-to-r from-violet-500 to-pink-500 text-white shadow-lg scale-105' : 'bg-transparent text-gray-600 hover:bg-white'}`}>
+                                    {plan.name}
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* Row 1: Summary Stats */}
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div className="glass-card p-6 flex flex-col items-center justify-center relative overflow-hidden">
+                            <i className="fa-solid fa-users text-5xl text-pink-500/20 absolute right-4 bottom-4"></i>
+                            <h3 className="text-gray-600 font-bold mb-1">จำนวนสมาชิก</h3>
+                            <p className="text-4xl font-bold text-gray-800">{members.length} <span className="text-lg">คน</span></p>
+                        </div>
+                        <div className="glass-card p-6 flex flex-col items-center justify-center bg-gradient-to-br from-green-400 to-teal-500 text-white shadow-xl transform hover:scale-105 transition">
+                            <h3 className="font-bold mb-1 opacity-90">หารแล้วตกคนละประมาณ</h3>
+                            <p className="text-5xl font-bold">฿{costPerPerson.toLocaleString()}</p>
+                        </div>
+                        <div className="glass-card p-6 flex flex-col items-center justify-center relative overflow-hidden">
+                            <i className="fa-solid fa-sack-dollar text-5xl text-green-500/20 absolute right-4 bottom-4"></i>
+                            <h3 className="text-gray-600 font-bold mb-1">งบกองกลาง (รวมทั้งทริป)</h3>
+                            <p className="text-4xl font-bold text-gray-800">฿{grandTotal.toLocaleString()}</p>
+                            <p className="text-sm text-gray-500 mt-1">(ตาม {plans.find(p=>p.id===activePlanId).name})</p>
+                        </div>
+                    </div>
+
+                    {/* Row 2: Members & Cars */}
+                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                        {/* Members Block */}
+                        <div className="glass-card p-6 lg:col-span-4 flex flex-col">
+                            <div className="flex justify-between items-center mb-4">
+                                <h2 className="text-xl font-bold text-gray-800"><i className="fa-solid fa-user-group text-pink-500 mr-2"></i> สมาชิกแก๊ง</h2>
+                                <button onClick={() => toggleModal('members')} className="bg-white/70 hover:bg-white text-gray-800 px-3 py-1 rounded-lg text-sm font-medium"><i className="fa-solid fa-pen"></i></button>
+                            </div>
+                            <div className="flex flex-wrap gap-2 flex-1 content-start">
+                                {members.map(m => (
+                                    <span key={m.id} className="px-3 py-1.5 bg-white/80 border border-pink-100 rounded-full shadow-sm text-gray-800 font-medium text-sm">{m.name}</span>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* Cars Block */}
+                        <div className="glass-card p-6 lg:col-span-8 flex flex-col">
+                            <div className="flex justify-between items-center mb-4">
+                                <h2 className="text-xl font-bold text-gray-800"><i className="fa-solid fa-car text-violet-500 mr-2"></i> จัดที่นั่งรถ</h2>
+                                <button onClick={() => toggleModal('cars')} className="bg-white/70 hover:bg-white text-gray-800 px-3 py-1 rounded-lg text-sm font-medium"><i className="fa-solid fa-pen"></i></button>
+                            </div>
+                            
+                            <div className="mb-4 p-3 bg-white/40 rounded-xl border border-white/50">
+                                <h3 className="text-sm font-bold text-gray-700 mb-2">แตะชื่อคน แล้วแตะเบาะว่างเพื่อวาง 📌:</h3>
+                                <div className="flex flex-wrap gap-2">
+                                    {unseatedMembers.map(m => (
+                                        <button key={m.id} onClick={() => handlePoolClick(m.id)}
+                                            className={`px-4 py-1.5 rounded-full font-bold text-sm transition-all border ${activeMemberId === m.id ? 'bg-violet-500 text-white border-violet-600 active-seat' : 'bg-white/90 text-gray-800 border-white hover:bg-white'}`}>
+                                            {m.name}
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                {cars.map(car => (
+                                    <div key={car.id} className="bg-white/50 rounded-2xl p-4 border border-white">
+                                        <div className="font-bold text-gray-800 mb-3 text-center border-b pb-2">🚙 {car.name} ({Object.keys(car.occupants).length}/{car.maxSeats})</div>
+                                        <div className="grid grid-cols-2 gap-2">
+                                            {Array.from({length: car.maxSeats}).map((_, idx) => {
+                                                const occupant = members.find(m => m.id === car.occupants[idx]);
+                                                return (
+                                                    <button key={idx} onClick={() => handleSeatClick(car.id, idx)}
+                                                        className={`h-12 rounded-xl flex items-center justify-center font-bold text-sm border-2 transition-all ${occupant ? 'bg-pink-100 border-pink-300 text-pink-800 shadow-sm' : 'bg-black/5 border-dashed border-gray-300 text-gray-400 hover:bg-black/10'} ${activeMemberId && !occupant ? 'animate-pulse border-violet-400 bg-violet-50' : ''}`}>
+                                                        {occupant ? occupant.name : 'ว่าง'}
+                                                    </button>
+                                                )
+                                            })}
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Row 3: Timelines (2 Columns on Desktop) */}
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-4">
+                        {renderTimelineBlock(currentJourney, 'เส้นทางการเดินทาง', 'fa-route', 'text-blue-600', 'journey')}
+                        {renderTimelineBlock(currentItinerary, 'แพลนท่องเที่ยว & กิจกรรม', 'fa-umbrella-beach', 'text-orange-600', 'itinerary')}
+                    </div>
+
+                    {/* Modals Data Management */}
+                    {modals.members && (
+                        <Modal title="จัดการสมาชิก" onClose={() => toggleModal('members')}>
+                            <form onSubmit={addMember} className="flex gap-2 mb-6"><input name="name" type="text" placeholder="ชื่อ..." required className="flex-1 px-4 py-2 rounded-xl border focus:outline-none bg-gray-50" /><button type="submit" className="bg-pink-500 text-white px-4 py-2 rounded-xl font-bold">เพิ่ม</button></form>
+                            <div className="flex flex-col gap-2">{members.map(m => (<div key={m.id} className="flex justify-between p-3 bg-gray-50 rounded-xl border"><span className="font-bold">{m.name}</span><button onClick={()=>removeMember(m.id)} className="text-red-500"><i className="fa-solid fa-trash"></i></button></div>))}</div>
+                        </Modal>
+                    )}
+                    {modals.cars && (
+                        <Modal title="จัดการรถยนต์" onClose={() => toggleModal('cars')}>
+                            <form onSubmit={addCar} className="flex flex-col gap-3 mb-6 bg-gray-50 p-4 rounded-xl"><input name="name" type="text" placeholder="ชื่อรถ" required className="px-4 py-2 rounded-xl border focus:outline-none" /><div className="flex gap-2"><input name="seats" type="number" min="1" placeholder="จำนวนที่นั่ง" required className="flex-1 px-4 py-2 rounded-xl border focus:outline-none" /><button type="submit" className="bg-violet-500 text-white px-6 py-2 rounded-xl font-bold">เพิ่มรถ</button></div></form>
+                            <div className="flex flex-col gap-2">{cars.map(c => (<div key={c.id} className="flex justify-between p-3 bg-gray-50 rounded-xl border"><div><span className="font-bold block">{c.name}</span><span className="text-sm text-gray-500">{c.maxSeats} ที่นั่ง</span></div><button onClick={()=>removeCar(c.id)} className="text-red-500"><i className="fa-solid fa-trash"></i></button></div>))}</div>
+                        </Modal>
+                    )}
+                    {modals.journey && (
+                        <Modal title="จัดการเส้นทาง" onClose={() => toggleModal('journey')}>
+                            {renderTimelineForm('journey')}
+                            <div className="flex flex-col gap-2">{journey.map(j => (<div key={j.id} className="flex justify-between items-center p-3 bg-gray-50 rounded-xl border"><div><span className="font-bold text-blue-600 mr-2">{j.time}</span><span className="font-bold">{j.name}</span> <span className="text-xs text-violet-600 bg-violet-100 px-2 py-0.5 rounded-full ml-2">Plan: {j.plan}</span></div><button onClick={()=>removeItem(j.id, 'journey')} className="text-red-500"><i className="fa-solid fa-trash"></i></button></div>))}</div>
+                        </Modal>
+                    )}
+                    {modals.itinerary && (
+                        <Modal title="จัดการแพลนเที่ยว" onClose={() => toggleModal('itinerary')}>
+                            {renderTimelineForm('itinerary')}
+                            <div className="flex flex-col gap-2">{itinerary.map(i => (<div key={i.id} className="flex justify-between items-center p-3 bg-gray-50 rounded-xl border"><div><span className="font-bold text-orange-600 mr-2">{i.time}</span><span className="font-bold">{i.name}</span> <span className="text-xs text-violet-600 bg-violet-100 px-2 py-0.5 rounded-full ml-2">Plan: {i.plan}</span></div><button onClick={()=>removeItem(i.id, 'itinerary')} className="text-red-500"><i className="fa-solid fa-trash"></i></button></div>))}</div>
+                        </Modal>
+                    )}
+
                 </div>
             );
         };
