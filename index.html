@@ -31,7 +31,20 @@
     <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
 
     <style>
-        body { background-color: #f1f5f9; color: #1e293b; margin: 0; min-height: 100vh; overflow-x: hidden; }
+        body { 
+    background-color: #f1f5f9; 
+    color: #1e293b; 
+    margin: 0; 
+    min-height: 100vh; 
+    overflow-x: hidden;
+    padding-bottom: 120px; /* เพิ่มระยะเว้นว่างด้านล่างกัน Sticky Bar บัง */
+}
+
+@media (max-width: 768px) {
+    body {
+        padding-bottom: 150px; /* บนมือถือบาร์อาจจะใหญ่กว่า ให้เผื่อที่เยอะขึ้น */
+    }
+}
         
         /* 1. Liquid Background Animations */
         .bg-mesh {
@@ -210,16 +223,17 @@
 
         // --- COMPONENTS ---
         const Modal = ({ title, onClose, children }) => (
-            <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-md z-50 flex items-center justify-center p-4">
-                <div className="glass-panel p-6 w-full max-w-lg shadow-2xl animate-slide-up max-h-[90vh] overflow-y-auto border-white/80">
-                    <div className="flex justify-between items-center mb-6">
-                        <h3 className="text-xl font-bold text-slate-800">{title}</h3>
-                        <button onClick={onClose} className="text-slate-400 hover:text-slate-700 text-2xl transition-transform hover:rotate-90">&times;</button>
-                    </div>
-                    {children}
-                </div>
+    <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-md z-50 flex items-center justify-center p-4">
+        <div className="glass-panel p-6 w-full max-w-lg shadow-2xl animate-slide-up max-h-[90vh] overflow-y-auto border-white/80">
+            <div className="flex justify-between items-center mb-6">
+                <h3 className="text-xl font-bold text-slate-800">{title}</h3>
+                {/* ปุ่มปิด (X) ตรงนี้ครับ */}
+                <button onClick={onClose} className="text-slate-400 hover:text-slate-700 text-3xl p-2 transition-transform hover:rotate-90">&times;</button>
             </div>
-        );
+            {children}
+        </div>
+    </div>
+);
 
         const App = () => {
             const [members, setMembers] = useState(initialMembers);
@@ -335,7 +349,7 @@
             const formatDate = (dateStr) => new Date(dateStr).toLocaleDateString('th-TH', { day: 'numeric', month: 'short', year: 'numeric' });
 
             return (
-                <div className="min-h-screen p-4 md:p-8 font-sans pb-32">
+                <div className="min-h-screen p-4 md:p-8 font-sans">
                     <div className="max-w-6xl mx-auto space-y-8">
                         
                         {/* Header */}
