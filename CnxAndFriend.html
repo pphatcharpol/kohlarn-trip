@@ -203,19 +203,19 @@
             // --- DAY 2 ---
             {
                 id: 'bf2', date: '2026-11-28', time: '07:29',
-                name: '🍳 ตื่นเช้าล้างหน้าแปรงฟัน ไปหาอะไรทาน',
+                name: '🍳 ตื่นเช้าล้างหน้าแปรงฟัน ไปหาอะไรทานกันดี',
                 desc: '',
                 hasOptions: true, selectedOption: 'optA',
                 options: [
-                    { id: 'optA', label: 'ชามเช้า', costs: { perPerson: 120 }, desc: '' },
-                    { id: 'optB', label: 'โกเผือกโกดำ', costs: { perPerson: 120 }, desc: '' },
+                    { id: 'optA', label: 'ชามเช้า', costs: { perPerson: 120 }, desc: 'อร่อยแบบกรุงเทพ' },
+                    { id: 'optB', label: 'โกเผือกโกดำ', costs: { perPerson: 120 }, desc: 'อร่อยแบบอินฟลู' },
                     { id: 'optC', label: 'คิดไม่ออก ยังไม่มีร้าน', costs: { perPerson: 100 }, desc: '' },
-                    { id: 'optD', label: 'ไม่กินก็ง่ายดี', costs: { fixed: 0 }, desc: 'ประหยัดตัง' }
+                    { id: 'optD', label: 'ไม่กินก็ง่ายดี', costs: { fixed: 0 }, desc: 'ประหยัดตัง ทำไมคนรวยๆ อย่าเรา' }
                 ]
             },
             { id: 'temple2', date: '2026-11-28', time: '11:15', name: '🙏 วัดพระธาตุดอยคำ', desc: '', hasOptions: false, costs: { perPerson: 100 } },
-            { id: 'lunch2', date: '2026-11-28', time: '12:30', name: '🍛 ข้าวกลางวันมันต้องกิน จะกินไหนก็แล้วแต่', desc: '', hasOptions: false, costs: { perPerson: 120 } },
-            { id: 'rest2', date: '2026-11-28', time: '14:00', name: '🛌 กลับที่พักเตรียมตัว หรือจะไปไหนก็ไป ไปซะไป', desc: '', hasOptions: false, costs: { fixed: 0 } },
+            { id: 'lunch2', date: '2026-11-28', time: '12:30', name: '🍛 คือข้าวกลางวันมันก็ต้องกินอะ แต่จะกินไหนก็แล้วแต่', desc: '', hasOptions: false, costs: { perPerson: 120 } },
+            { id: 'rest2', date: '2026-11-28', time: '14:00', name: '🛌 อาจจะกลับที่พัก หรือจะไปไหนก็ไป ไปซะไป', desc: '', hasOptions: false, costs: { fixed: 0 } },
             {
                 id: 'fest_go1', date: '2026-11-28', time: '15:15',
                 name: '🎪 เดินทางไป เชียงใหญ่เฟส (Day 1)',
@@ -223,7 +223,7 @@
                 hasOptions: true, selectedOption: 'optA',
                 options: [
                     { id: 'optA', label: 'นั่ง Grab แพงหน่อยหารกัน', costs: { perPerson: 2000, perCar4: 370 }, desc: 'Grab คันละ 370 (นั่งได้ 4 คน)' },
-                    { id: 'optB', label: 'ขี่รถส่วนตัว / มอไซค์ไปเอง', costs: { perPerson: 2000 }, desc: 'ฟรีค่ารถ (จ่ายแต่ค่าบัตร)' }
+                    { id: 'optB', label: 'มอไซค์ไปเอง', costs: { perPerson: 2000 }, desc: 'รถยนตือย่าหาเอาไปเอง' }
                 ]
             },
             {
@@ -281,7 +281,7 @@
                     { id: 'optA', label: 'สุรา', costs: { perPerson: 400 }, desc: '' },
                     { id: 'optB', label: 'เหล้า', costs: { perPerson: 400 }, desc: '' },
                     { id: 'optC', label: 'เบียร์', costs: { perPerson: 400 }, desc: '' },
-                    { id: 'optD', label: 'เหมาหมด', costs: { perPerson: 800 }, desc: 'จัดไป' }
+                    { id: 'optD', label: 'เหมาหมด', costs: { perPerson: 800 }, desc: 'กินทำไม กินเหล้าทำไม' }
                 ]
             },
             {
@@ -304,9 +304,9 @@
                 desc: '',
                 hasOptions: true, selectedOption: 'optA',
                 options: [
-                    { id: 'optA', label: 'ตี๋หมวยก๋วยเตี๋ยวเรือ', costs: { perPerson: 60 }, desc: '' },
-                    { id: 'optB', label: 'ซูชิโร่', costs: { perPerson: 400 }, desc: '' },
-                    { id: 'optC', label: 'ตี๋น้อย', costs: { perPerson: 289 }, desc: '' }
+                    { id: 'optA', label: 'ตี๋หมวยก๋วยเตี๋ยวเรือ', costs: { perPerson: 60 }, desc: ' อร่อยสัส' },
+                    { id: 'optB', label: 'ซูชิโร่', costs: { perPerson: 400 }, desc: 'ก็ดี' },
+                    { id: 'optC', label: 'ตี๋น้อย', costs: { perPerson: 289 }, desc: 'ก็เออ แล้วแต่' }
                 ]
             },
             { id: 'cafe4', date: '2026-11-30', time: '12:30', name: '🍰 คาเฟ่ เค้กเปี่ยมสุข', desc: '', hasOptions: false, costs: { perPerson: 150 } },
