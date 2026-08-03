@@ -156,15 +156,26 @@
                 hasOptions: true, selectedOption: 'optA', syncGroup: 'transport_main',
                 options: [
                     { id: 'optA', label: 'Plan A: ขับรถส่วนตัวไปเอง', costs: { perCar4: 1300 }, desc: 'ค่าน้ำมัน 1300 / คัน' },
-                    { id: 'optB1', label: 'Plan B1: รถไฟด่วนพิเศษ13 (ชั้น3)', costs: { perPerson: 255, perRoom2: 1200 }, desc: 'ค่ารถไฟ 255/คน + เช่ามอไซค์ 1200/คัน (ซ้อน2)' },
-                    { id: 'optB2', label: 'Plan B2: รถไฟด่วนพิเศษ13 (ชั้น2)', costs: { perPerson: 340, perRoom2: 1200 }, desc: 'ค่ารถไฟ 340/คน + เช่ามอไซค์' },
-                    { id: 'optB3', label: 'Plan B3: รถไฟด่วน51 (ชั้น3)', costs: { perPerson: 215, perRoom2: 1200 }, desc: 'ค่ารถไฟ 215/คน + เช่ามอไซค์' },
-                    { id: 'optB4', label: 'Plan B4: รถไฟด่วน51 (ชั้น2)', costs: { perPerson: 300, perRoom2: 1200 }, desc: 'ค่ารถไฟ 300/คน + เช่ามอไซค์' },
-                    { id: 'optB5', label: 'Plan B5: รถไฟท้องถิ่น407', costs: { perPerson: 65, perRoom2: 1200 }, desc: 'ค่ารถไฟ 65/คน + เช่ามอไซค์' },
-                    { id: 'optC1', label: 'Plan C1: รถบัส 7.00น.', costs: { perPerson: 367, perRoom2: 1200 }, desc: 'ค่าบัส 367/คน + เช่ามอไซค์' },
-                    { id: 'optC2', label: 'Plan C2: รถบัส 8.15 / 9.30น.', costs: { perPerson: 389, perRoom2: 1200 }, desc: 'ค่าบัส 389/คน + เช่ามอไซค์' }
+                    { id: 'optB1', label: 'Plan B1: รถไฟด่วนพิเศษ13 (ชั้น3)', costs: { perPerson: 255 }, desc: 'ค่ารถไฟ 255/คน' },
+                    { id: 'optB2', label: 'Plan B2: รถไฟด่วนพิเศษ13 (ชั้น2)', costs: { perPerson: 340 }, desc: 'ค่ารถไฟ 340/คน' },
+                    { id: 'optB3', label: 'Plan B3: รถไฟด่วน51 (ชั้น3)', costs: { perPerson: 215 }, desc: 'ค่ารถไฟ 215/คน' },
+                    { id: 'optB4', label: 'Plan B4: รถไฟด่วน51 (ชั้น2)', costs: { perPerson: 300 }, desc: 'ค่ารถไฟ 300/คน' },
+                    { id: 'optB5', label: 'Plan B5: รถไฟท้องถิ่น407', costs: { perPerson: 65 }, desc: 'ค่ารถไฟ 65/คน' },
+                    { id: 'optC1', label: 'Plan C1: รถบัส 7.00น.', costs: { perPerson: 367 }, desc: 'ค่ารถบัส 367/คน' },
+                    { id: 'optC2', label: 'Plan C2: รถบัส 8.15 / 9.30น.', costs: { perPerson: 389 }, desc: 'ค่ารถบัส 389/คน' }
                 ]
             },
+            {
+                id: 'rent_bike', date: '2026-11-27', time: '13:00',
+                name: '🛵 เช่ามอเตอร์ไซค์ (ใช้ 4 วัน)',
+                desc: 'สำหรับคนที่นั่งรถไฟ/รถบัสมา (เช่า 1 คันซ้อนได้ 2 คน)',
+                hasOptions: true, selectedOption: 'optA',
+                options: [
+                    { id: 'optA', label: 'เช่ามอเตอร์ไซค์', costs: { perRoom2: 1200 }, desc: 'วันละ 300 x 4 วัน = 1,200/คัน (ซ้อน 2)' },
+                    { id: 'optB', label: 'ไม่เช่า (เอารถมาเอง)', costs: { fixed: 0 }, desc: 'รวย ริชชี่เกิร์ล' }
+                ]
+            },
+            
             {
                 id: 'hotel', date: '2026-11-27', time: '14:00',
                 name: '🏨 เช็คอินเข้าที่พักเชียงใหม่ (นอน 3 คืน)',
@@ -468,7 +479,7 @@
                                         ))}
                                     </div>
                                     <div className="mt-6 p-4 bg-popPink/10 rounded-2xl border border-popPink/20 text-pink-100 text-sm">
-                                        <i className="fa-solid fa-bolt text-popPink mr-2 animate-pulse"></i> <b>ระบบคำนวณอัจฉริยะ:</b> เปลี่ยนจำนวนคน ยอดเงินจะถูกหารและปัดเศษ (ห้อง/รถ) ให้อัตโนมัติ!
+                                        <i className="fa-solid fa-bolt text-popPink mr-2 animate-pulse"></i> <b>คำนวณให้เอง:</b> เปลี่ยนจำนวนคน ยอดเงินจะถูกหารและปัดเศษ (ห้อง/รถ)
                                     </div>
                                 </div>
                             </div>
