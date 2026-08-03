@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎸 ไปเชียงใหม่ กับเพื่อนทำไม ⛺</title>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Prompt', 'sans-serif'] },
+                    colors: { 
+                        popCyan: '#06b6d4',
+                        popPink: '#f43f5e',
+                        popPurple: '#8b5cf6',
+                        popYellow: '#f59e0b'
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- React & Babel -->
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+
+    <style>
+        body { 
+            background-color: #0f172a; /* Dark mode base for Pop colors to glow */
+            color: #f8fafc; 
+            margin: 0; 
+            min-height: 100vh; 
+            overflow-x: hidden;
+            padding-bottom: 140px; 
+        }
+
+        /* 1. Pop Culture Liquid Background */
+        .bg-mesh {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -2;
+            background-color: #020617;
+            background-image: 
+                radial-gradient(at 0% 0%, hsla(339, 89%, 60%, 0.25) 0, transparent 50%), 
+                radial-gradient(at 50% 0%, hsla(192, 95%, 37%, 0.25) 0, transparent 50%), 
+                radial-gradient(at 100% 0%, hsla(258, 90%, 66%, 0.25) 0, transparent 50%);
+        }
+
+        .orb {
+            position: fixed; border-radius: 50%; filter: blur(90px); opacity: 0.6; z-index: -1;
+            animation: float 15s infinite ease-in-out alternate;
+        }
+        .orb-1 { width: 45vw; height: 45vw; top: -10%; left: -10%; background: #ec4899; }
+        .orb-2 { width: 55vw; height: 55vw; bottom: -20%; right: -10%; background: #06b6d4; animation-delay: -5s; }
+        .orb-3 { width: 40vw; height: 40vw; top: 30%; left: 40%; background: #8b5cf6; animation-delay: -10s; }
+
+        @keyframes float { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(15vw, -15vh) scale(1.15); } }
+
+        /* 2. Glassmorphism Utilities */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(28px); -webkit-backdrop-filter: blur(28px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 32px;
+            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* Interactive Options (Pop Glowing) */
+        .option-label { cursor: pointer; display: block; height: 100%; }
+        .option-label:hover .glass-card { background: rgba(255, 255, 255, 0.1); border-color: rgba(255, 255, 255, 0.3); }
+        .option-input:checked + .glass-card {
+            background: rgba(6, 182, 212, 0.15);
+            border-color: #06b6d4;
+            box-shadow: 0 10px 30px -5px rgba(6, 182, 212, 0.4), inset 0 0 0 1px #06b6d4;
+            transform: translateY(-4px) scale(1.02);
+        }
+        .option-input:checked + .glass-card .check-icon { transform: scale(1); opacity: 1; text-shadow: 0 0 10px #06b6d4; }
+        .check-icon { transform: scale(0); opacity: 0; transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); }
+
+        /* Sticky Summary */
+        .sticky-summary {
+            position: fixed;
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px);
+            color: white;
+            box-shadow: 0 -15px 50px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.1);
+            z-index: 50;
+            display: flex; justify-content: space-between; align-items: center;
+            bottom: 0; left: 0; width: 100%;
+            border-radius: 40px 40px 0 0;
+            padding: 24px 30px;
+        }
+
+        @media (min-width: 768px) {
+            .sticky-summary {
+                bottom: 30px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 800px;
+                border-radius: 999px; padding: 20px 40px;
+                border: 1px solid rgba(255, 255, 255, 0.15);
+            }
+        }
+
+        /* Animations */
+        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-slide-up { animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        
+        .modal-backdrop { background: rgba(2, 6, 23, 0.6); backdrop-filter: blur(12px); }
+    </style>
+</head>
+<body>
+    <div class="bg-mesh"></div>
+    <div class="orb orb-1"></div><div class="orb orb-2"></div><div class="orb orb-3"></div>
+    
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useMemo } = React;
+
+        // --- CALCULATION ENGINE ---
+        // units: 'perPerson' (x8), 'perRoom2' (x4), 'perCar4' (x2), 'fixed' (x1)
+        const calcCost = (costs, membersCount) => {
+            let total = 0;
+            if(!costs) return 0;
+            if(costs.perPerson) total += costs.perPerson * membersCount;
+            if(costs.perRoom2) total += costs.perRoom2 * Math.ceil(membersCount / 2);
+            if(costs.perCar4) total += costs.perCar4 * Math.ceil(membersCount / 4);
+            if(costs.fixed) total += costs.fixed;
+            return total;
+        };
+
+        // --- INITIAL DATA ---
+        const initialMembers = [
+            { id: 1, name: 'ที' }, { id: 2, name: 'ฟิว' }, { id: 3, name: 'เบส' }, { id: 4, name: 'เฟิร์ส' },
+            { id: 5, name: 'แอ็ค' }, { id: 6, name: 'ต้นหอม' }, { id: 7, name: 'บิว' }, { id: 8, name: 'แฟนที' }
+        ];
+
+        const initialItinerary = [
+            // --- DAY 1 ---
+            {
+                id: 't_go', date: '2026-11-27', time: '06:30',
+                name: '🚗 ขาไป: ออกเดินทางจากพิษณุโลก',
+                desc: 'ระหว่างทางจะกินข้าวเช้าข้าวเที่ยงเหี้ยอะไรก็เรื่องของพ่อมึงมีปากก็พูดสิบักสันดานนี่',
+                hasOptions: true, selectedOption: 'optA', syncGroup: 'transport_main',
+                options: [
+                    { id: 'optA', label: 'Plan A: ขับรถส่วนตัวไปเอง', costs: { perCar4: 1300 }, desc: 'ค่าน้ำมัน 1300 / คัน' },
+                    { id: 'optB1', label: 'Plan B1: รถไฟด่วนพิเศษ13 (ชั้น3)', costs: { perPerson: 255, perRoom2: 1200 }, desc: 'ค่ารถไฟ 255/คน + เช่ามอไซค์ 1200/คัน (ซ้อน2)' },
+                    { id: 'optB2', label: 'Plan B2: รถไฟด่วนพิเศษ13 (ชั้น2)', costs: { perPerson: 340, perRoom2: 1200 }, desc: 'ค่ารถไฟ 340/คน + เช่ามอไซค์' },
+                    { id: 'optB3', label: 'Plan B3: รถไฟด่วน51 (ชั้น3)', costs: { perPerson: 215, perRoom2: 1200 }, desc: 'ค่ารถไฟ 215/คน + เช่ามอไซค์' },
+                    { id: 'optB4', label: 'Plan B4: รถไฟด่วน51 (ชั้น2)', costs: { perPerson: 300, perRoom2: 1200 }, desc: 'ค่ารถไฟ 300/คน + เช่ามอไซค์' },
+                    { id: 'optB5', label: 'Plan B5: รถไฟท้องถิ่น407', costs: { perPerson: 65, perRoom2: 1200 }, desc: 'ค่ารถไฟ 65/คน + เช่ามอไซค์' },
+                    { id: 'optC1', label: 'Plan C1: รถบัส 7.00น.', costs: { perPerson: 367, perRoom2: 1200 }, desc: 'ค่าบัส 367/คน + เช่ามอไซค์' },
+                    { id: 'optC2', label: 'Plan C2: รถบัส 8.15 / 9.30น.', costs: { perPerson: 389, perRoom2: 1200 }, desc: 'ค่าบัส 389/คน + เช่ามอไซค์' }
+                ]
+            },
+            {
+                id: 'hotel', date: '2026-11-27', time: '14:00',
+                name: '🏨 เช็คอินเข้าที่พักเชียงใหม่ (นอน 3 คืน)',
+                desc: 'จะมาถึงกี่โมงไม่รู้แต่ที่พักเข้าได้บ่าย 2 (หาร 2 คน/ห้อง)',
+                hasOptions: true, selectedOption: 'optA',
+                options: [
+                    { id: 'optA', label: 'Plan A: ธรรมดา ไม่ใกล้เมืองมาก', costs: { perRoom2: 2700 }, desc: '900/คืน = 2,700 ต่อห้อง' },
+                    { id: 'optB', label: 'Plan B: ดีมาหน่อย', costs: { perRoom2: 3600 }, desc: '1,200/คืน = 3,600 ต่อห้อง' },
+                    { id: 'optC', label: 'Plan C: ดีจัง ใกล้งาน/ในเมือง', costs: { perRoom2: 5100 }, desc: '1,700/คืน = 5,100 ต่อห้อง' }
+                ]
+            },
+            {
+                id: 'freetime1', date: '2026-11-27', time: '14:30',
+                name: '📸 Freetime อยากจะทำไรก็สุดแต่ใจ',
+                desc: 'ถ้าไม่เห็นตรงกันก็ไปเดินเล่นแถวที่พักไป',
+                hasOptions: true, selectedOption: 'optB',
+                options: [
+                    { id: 'optA', label: 'สวนสัตว์เชียงใหม่', costs: { perPerson: 120 }, desc: 'ถ้าเข้าอควาเรียมแพงกว่านี้' },
+                    { id: 'optB', label: 'วัดโลกโมฬี (มูหาความรัก)', costs: { perPerson: 100 }, desc: 'เผื่ออีสันดานอย่างพวกมึงจะมีกับเขาบ้าง' },
+                    { id: 'optC', label: 'คาเฟ่ ล้นบ้านล้นเมือง', costs: { perPerson: 120 }, desc: 'จะไปที่ไหนก็ไป' }
+                ]
+            },
+            { id: 'dinner1', date: '2026-11-27', time: '18:00', name: '🍲 อ่างแก้ว มช. / ดินเนอร์', desc: 'ชูบาชาบูกับเพื่อน กรุบๆ', hasOptions: false, costs: { perPerson: 389 } },
+            
+            // --- DAY 2 ---
+            {
+                id: 'bf2', date: '2026-11-28', time: '07:29',
+                name: '🍳 ตื่นเช้าล้างหน้าแปรงฟัน ไปหาอะไรทาน',
+                desc: '',
+                hasOptions: true, selectedOption: 'optA',
+                options: [
+                    { id: 'optA', label: 'ชามเช้า', costs: { perPerson: 120 }, desc: '' },
+                    { id: 'optB', label: 'โกเผือกโกดำ', costs: { perPerson: 120 }, desc: '' },
+                    { id: 'optC', label: 'คิดไม่ออก ยังไม่มีร้าน', costs: { perPerson: 100 }, desc: '' },
+                    { id: 'optD', label: 'ไม่กินก็ง่ายดี', costs: { fixed: 0 }, desc: 'ประหยัดตัง' }
+                ]
+            },
+            { id: 'temple2', date: '2026-11-28', time: '11:15', name: '🙏 วัดพระธาตุดอยคำ', desc: '', hasOptions: false, costs: { perPerson: 100 } },
+            { id: 'lunch2', date: '2026-11-28', time: '12:30', name: '🍛 ข้าวกลางวันมันต้องกิน จะกินไหนก็แล้วแต่', desc: '', hasOptions: false, costs: { perPerson: 120 } },
+            { id: 'rest2', date: '2026-11-28', time: '14:00', name: '🛌 กลับที่พักเตรียมตัว หรือจะไปไหนก็ไป ไปซะไป', desc: '', hasOptions: false, costs: { fixed: 0 } },
+            {
+                id: 'fest_go1', date: '2026-11-28', time: '15:15',
+                name: '🎪 เดินทางไป เชียงใหญ่เฟส (Day 1)',
+                desc: 'ราคานี้รวมค่าบัตร 2 วันแล้ว (2000/คน)',
+                hasOptions: true, selectedOption: 'optA',
+                options: [
+                    { id: 'optA', label: 'นั่ง Grab แพงหน่อยหารกัน', costs: { perPerson: 2000, perCar4: 370 }, desc: 'Grab คันละ 370 (นั่งได้ 4 คน)' },
+                    { id: 'optB', label: 'ขี่รถส่วนตัว / มอไซค์ไปเอง', costs: { perPerson: 2000 }, desc: 'ฟรีค่ารถ (จ่ายแต่ค่าบัตร)' }
+                ]
+            },
+            {
+                id: 'fest_drink1', date: '2026-11-28', time: '16:45',
+                name: '🍻 ถึงงานเชียงใหญ่เฟส (ถึง 17.00 จะเริ่ดมาก)',
+                desc: 'ค่าแอลกอฮอล์หน้าเวที',
+                hasOptions: true, selectedOption: 'optA',
+                options: [
+                    { id: 'optA', label: 'สุรา', costs: { perPerson: 400 }, desc: '' },
+                    { id: 'optB', label: 'เหล้า', costs: { perPerson: 400 }, desc: '' },
+                    { id: 'optC', label: 'เบียร์', costs: { perPerson: 400 }, desc: '' },
+                    { id: 'optD', label: 'เหมาหมด', costs: { perPerson: 800 }, desc: 'เอาให้ตับพัง' }
+                ]
+            },
+            {
+                id: 'fest_back1', date: '2026-11-28', time: '23:58',
+                name: '🚕 เดินทางกลับที่พัก (Day 1)',
+                desc: 'มาทางไหนกลับไปทางนั้น',
+                hasOptions: true, selectedOption: 'optA',
+                options: [
+                    { id: 'optA', label: 'นั่ง Grab กลับ', costs: { perCar4: 370 }, desc: '' },
+                    { id: 'optB', label: 'ขี่รถกลับเอง', costs: { fixed: 0 }, desc: '' }
+                ]
+            },
+
+            // --- DAY 3 ---
+            {
+                id: 'bf3', date: '2026-11-29', time: '10:58',
+                name: '🍳 กว่าเธอจะตื่นเขาไปกับคนอื่นหมดแล้ว (อาหารเช้า)',
+                desc: '',
+                hasOptions: true, selectedOption: 'optA',
+                options: [
+                    { id: 'optA', label: 'ชามเช้า', costs: { perPerson: 120 }, desc: '' },
+                    { id: 'optB', label: 'โกเผือกโกดำ', costs: { perPerson: 120 }, desc: '' },
+                    { id: 'optC', label: 'คิดไม่ออก ยังไม่มีร้าน', costs: { perPerson: 100 }, desc: '' },
+                    { id: 'optD', label: 'ไม่กินก็ง่ายดี', costs: { fixed: 0 }, desc: 'ประหยัดตัง' }
+                ]
+            },
+            {
+                id: 'fest_go2', date: '2026-11-29', time: '15:15',
+                name: '🎪 เดินทางไป เชียงใหญ่เฟส (Day 2)',
+                desc: 'ที่ Royal Train Garden (ไม่ควรเอารถยนต์ไป)',
+                hasOptions: true, selectedOption: 'optA',
+                options: [
+                    { id: 'optA', label: 'นั่ง Grab แพงหน่อยหารกัน', costs: { perCar4: 370 }, desc: '' },
+                    { id: 'optB', label: 'ขี่มอไซค์ไปเอง', costs: { fixed: 0 }, desc: '' }
+                ]
+            },
+            {
+                id: 'fest_drink2', date: '2026-11-29', time: '16:45',
+                name: '🍻 ถึงงานเชียงใหญ่เฟส Day 2',
+                desc: '',
+                hasOptions: true, selectedOption: 'optA',
+                options: [
+                    { id: 'optA', label: 'สุรา', costs: { perPerson: 400 }, desc: '' },
+                    { id: 'optB', label: 'เหล้า', costs: { perPerson: 400 }, desc: '' },
+                    { id: 'optC', label: 'เบียร์', costs: { perPerson: 400 }, desc: '' },
+                    { id: 'optD', label: 'เหมาหมด', costs: { perPerson: 800 }, desc: 'จัดไป' }
+                ]
+            },
+            {
+                id: 'fest_back2', date: '2026-11-29', time: '23:58',
+                name: '🚕 เดินทางกลับ + มื้อดึกคนหิว',
+                desc: 'ถ้าเกิดคุณหิวตอนดึก เรามีบริการ',
+                hasOptions: true, selectedOption: 'optA',
+                options: [
+                    { id: 'optA', label: 'Grab(370) + ตี๋น้อย', costs: { perCar4: 370, perPerson: 289 }, desc: 'นั่งแกร็บกลับ + แวะกินสุกี้' },
+                    { id: 'optB', label: 'Grab(370) + บะหมี่สามเหลือง', costs: { perCar4: 370, perPerson: 65 }, desc: 'นั่งแกร็บกลับ + แวะกินหมี่' },
+                    { id: 'optC', label: 'กลับนอน ไม่แดกละ', costs: { perCar4: 370 }, desc: 'นั่งแกร็บกลับอย่างเดียว' }
+                ]
+            },
+
+            // --- DAY 4 ---
+            { id: 'wakeup4', date: '2026-11-30', time: '10:00', name: '🥱 ตื่นเช้ามาเลือกสิ่งดีๆให้ชีวิต', desc: 'ถ้าต้องเลือกอะไรดีๆ ป่านนี้กูกับมึงไม่ได้เป็นเพื่อนกันแล้วแหละ', hasOptions: false, costs: { fixed: 0 } },
+            {
+                id: 'lunch4', date: '2026-11-30', time: '11:00',
+                name: '🍛 คิดว่าได้กินข้าวด้วยกันไหม (ยากอยู่)',
+                desc: '',
+                hasOptions: true, selectedOption: 'optA',
+                options: [
+                    { id: 'optA', label: 'ตี๋หมวยก๋วยเตี๋ยวเรือ', costs: { perPerson: 60 }, desc: '' },
+                    { id: 'optB', label: 'ซูชิโร่', costs: { perPerson: 400 }, desc: '' },
+                    { id: 'optC', label: 'ตี๋น้อย', costs: { perPerson: 289 }, desc: '' }
+                ]
+            },
+            { id: 'cafe4', date: '2026-11-30', time: '12:30', name: '🍰 คาเฟ่ เค้กเปี่ยมสุข', desc: '', hasOptions: false, costs: { perPerson: 150 } },
+            {
+                id: 't_back', date: '2026-11-30', time: '13:00',
+                name: '🚗 ขากลับ: กลับบ้าน',
+                desc: 'มาทางไหน กลับไปทางนั้น ไปซะไปเดี๋ยวกูถีบหงายท้องหงายใส้',
+                hasOptions: true, selectedOption: 'optA', syncGroup: 'transport_main', // Sync กับขาไป
+                options: [
+                    { id: 'optA', label: 'Plan A: ขับรถส่วนตัวกลับ', costs: { perCar4: 1300 }, desc: 'ค่าน้ำมัน 1300 / คัน' },
+                    { id: 'optB1', label: 'Plan B1: รถไฟด่วนพิเศษ13 (ชั้น3)', costs: { perPerson: 255 }, desc: 'เฉพาะค่ารถไฟ (คืนมอไซค์แล้ว)' },
+                    { id: 'optB2', label: 'Plan B2: รถไฟด่วนพิเศษ13 (ชั้น2)', costs: { perPerson: 340 }, desc: 'เฉพาะค่ารถไฟ' },
+                    { id: 'optB3', label: 'Plan B3: รถไฟด่วน51 (ชั้น3)', costs: { perPerson: 215 }, desc: 'เฉพาะค่ารถไฟ' },
+                    { id: 'optB4', label: 'Plan B4: รถไฟด่วน51 (ชั้น2)', costs: { perPerson: 300 }, desc: 'เฉพาะค่ารถไฟ' },
+                    { id: 'optB5', label: 'Plan B5: รถไฟท้องถิ่น407', costs: { perPerson: 65 }, desc: 'เฉพาะค่ารถไฟ' },
+                    { id: 'optC1', label: 'Plan C1: รถบัส 7.00น.', costs: { perPerson: 367 }, desc: 'เฉพาะค่ารถบัส' },
+                    { id: 'optC2', label: 'Plan C2: รถบัส 8.15 / 9.30น.', costs: { perPerson: 389 }, desc: 'เฉพาะค่ารถบัส' }
+                ]
+            }
+        ];
+
+        // --- COMPONENTS ---
+        const Modal = ({ title, onClose, children }) => (
+            <div className="fixed inset-0 modal-backdrop z-[100] flex items-center justify-center p-4 md:p-6">
+                <div className="glass-panel w-full max-w-lg shadow-2xl animate-slide-up max-h-[90vh] overflow-y-auto border-t border-l border-white/30 bg-slate-900/60 relative">
+                    <button 
+                        onClick={onClose} 
+                        className="absolute top-4 right-4 w-10 h-10 flex items-center justify-center bg-white/10 hover:bg-popPink text-white rounded-full backdrop-blur-md transition-all duration-300 shadow-sm hover:shadow-[0_0_15px_#f43f5e] hover:rotate-90 z-10"
+                    >
+                        <i className="fa-solid fa-xmark text-xl"></i>
+                    </button>
+                    <div className="p-6 md:p-8 pt-8">
+                        <div className="mb-6 border-b border-white/20 pb-3 pr-8">
+                            <h3 className="text-2xl font-bold text-popCyan drop-shadow-sm">{title}</h3>
+                        </div>
+                        {children}
+                    </div>
+                </div>
+            </div>
+        );
+
+        const App = () => {
+            const [members, setMembers] = useState(initialMembers);
+            const [itinerary, setItinerary] = useState(initialItinerary);
+            const [modals, setModals] = useState({ members: false, plan: false });
+
+            const [newPlanType, setNewPlanType] = useState('single');
+            const [newOptions, setNewOptions] = useState([{ id: 'optA', label: '', unit: 'perPerson', cost: 0, desc: '' }]);
+
+            // --- Handlers ---
+            const handleOptionSelect = (itemId, optionId) => {
+                setItinerary(prev => {
+                    const changedItem = prev.find(i => i.id === itemId);
+                    if (changedItem.syncGroup) {
+                        return prev.map(item => 
+                            item.syncGroup === changedItem.syncGroup ? { ...item, selectedOption: optionId } : item
+                        );
+                    }
+                    return prev.map(item => item.id === itemId ? { ...item, selectedOption: optionId } : item);
+                });
+            };
+
+            const toggleModal = (key) => {
+                setModals(prev => ({ ...prev, [key]: !prev[key] }));
+                if(key === 'plan' && !modals.plan) {
+                    setNewPlanType('single');
+                    setNewOptions([{ id: 'optA', label: '', unit: 'perPerson', cost: 0, desc: '' }]);
+                }
+            };
+
+            const addMember = (e) => { e.preventDefault(); const n = e.target.name.value.trim(); if(n){ setMembers([...members, {id: Date.now(), name: n}]); e.target.reset(); }};
+            const removeMember = (id) => setMembers(members.filter(m => m.id !== id));
+
+            const handleAddOptionField = () => {
+                const nextChar = String.fromCharCode(65 + newOptions.length);
+                setNewOptions([...newOptions, { id: `opt${nextChar}`, label: '', unit: 'perPerson', cost: 0, desc: '' }]);
+            };
+
+            const handleOptionChange = (index, field, value) => {
+                const updated = [...newOptions];
+                updated[index][field] = value;
+                setNewOptions(updated);
+            };
+
+            const removeOptionField = (index) => {
+                if(newOptions.length > 1) {
+                    const updated = newOptions.filter((_, i) => i !== index);
+                    const reIndexed = updated.map((opt, i) => ({ ...opt, id: `opt${String.fromCharCode(65 + i)}` }));
+                    setNewOptions(reIndexed);
+                }
+            };
+
+            const submitNewPlan = (e) => {
+                e.preventDefault();
+                const fd = new FormData(e.target);
+                
+                const newItem = {
+                    id: `custom_${Date.now()}`, date: fd.get('date'), time: fd.get('time'),
+                    name: fd.get('name'), desc: fd.get('desc'),
+                };
+
+                if (newPlanType === 'single') {
+                    newItem.hasOptions = false;
+                    const val = parseFloat(fd.get('cost') || 0);
+                    const unit = fd.get('singleUnit');
+                    newItem.costs = { [unit]: val };
+                } else {
+                    newItem.hasOptions = true;
+                    newItem.selectedOption = 'optA';
+                    newItem.options = newOptions.filter(opt => opt.label.trim() !== '').map(opt => ({
+                        id: opt.id, label: opt.label || `Plan ${opt.id.replace('opt','')}`,
+                        costs: { [opt.unit]: parseFloat(opt.cost || 0) }, desc: opt.desc
+                    }));
+                    if(newItem.options.length === 0) return alert('กรุณากรอกตัวเลือกอย่างน้อย 1 อัน');
+                }
+
+                setItinerary([...itinerary, newItem].sort((a,b) => a.date.localeCompare(b.date) || a.time.localeCompare(b.time)));
+                toggleModal('plan');
+            };
+
+            const removePlan = (id) => setItinerary(itinerary.filter(i => i.id !== id));
+
+            // --- Calculations ---
+            const totalCost = itinerary.reduce((sum, item) => {
+                let costObj = item.costs;
+                if (item.hasOptions) {
+                    const opt = item.options.find(o => o.id === item.selectedOption);
+                    costObj = opt ? opt.costs : null;
+                }
+                return sum + calcCost(costObj, members.length);
+            }, 0);
+
+            const costPerPerson = members.length > 0 ? totalCost / members.length : 0;
+
+            const groupedItinerary = itinerary.reduce((acc, item) => {
+                if (!acc[item.date]) acc[item.date] = [];
+                acc[item.date].push(item);
+                return acc;
+            }, {});
+
+            const formatDate = (dateStr) => new Date(dateStr).toLocaleDateString('th-TH', { day: 'numeric', month: 'short', year: 'numeric' });
+
+            return (
+                <div className="p-4 md:p-8 font-sans relative z-10">
+                    <div className="max-w-6xl mx-auto space-y-8">
+                        
+                        {/* Header */}
+                        <div className="glass-panel p-10 md:p-16 text-center animate-slide-up relative overflow-hidden group hover:shadow-[0_0_50px_rgba(6,182,212,0.3)] transition-all duration-500">
+                            <div className="absolute top-0 right-0 p-4 opacity-10 transition-transform duration-700 group-hover:scale-125 group-hover:-rotate-12">
+                                <i className="fa-solid fa-guitar text-9xl text-popPink"></i>
+                            </div>
+                            <h1 className="text-5xl md:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-br from-popCyan via-white to-popPurple mb-4 tracking-tighter drop-shadow-lg relative z-10 uppercase">ไปเชียงใหม่ <br/>กับเพื่อนทำไม 🔥</h1>
+                            <p className="text-cyan-100 font-semibold text-lg md:text-xl relative z-10 bg-black/30 inline-block px-6 py-2 rounded-full shadow-lg backdrop-blur-md border border-white/10">พิษณุโลก ➔ เชียงใหม่ (27-30 พ.ย. 2026)</p>
+                        </div>
+
+                        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                            
+                            {/* Left Column */}
+                            <div className="lg:col-span-4 space-y-6">
+                                <div className="glass-panel p-6 animate-slide-up hover:border-white/30 hover:shadow-[0_0_30px_rgba(139,92,246,0.2)] transition-all" style={{animationDelay: '0.1s'}}>
+                                    <div className="flex justify-between items-center mb-6 pb-4 border-b border-white/10">
+                                        <h2 className="text-xl font-bold text-popPurple drop-shadow-md"><i className="fa-solid fa-users-rays mr-2"></i> แก๊งคนบาป ({members.length})</h2>
+                                        <button onClick={()=>toggleModal('members')} className="glass-card hover:bg-white/10 text-white px-4 py-2 rounded-xl text-sm font-semibold transition-all shadow-sm hover:shadow-[0_0_15px_rgba(255,255,255,0.2)]"><i className="fa-solid fa-pen"></i> แก้ไข</button>
+                                    </div>
+                                    <div className="flex flex-wrap gap-3">
+                                        {members.map(m => (
+                                            <span key={m.id} className="glass-card px-5 py-2.5 rounded-full text-white font-bold text-sm border-white/20 shadow-md flex items-center gap-2 bg-gradient-to-r from-white/5 to-white/10 hover:scale-105 transition-transform cursor-default">
+                                                {m.name}
+                                            </span>
+                                        ))}
+                                    </div>
+                                    <div className="mt-6 p-4 bg-popPink/10 rounded-2xl border border-popPink/20 text-pink-100 text-sm">
+                                        <i className="fa-solid fa-bolt text-popPink mr-2 animate-pulse"></i> <b>ระบบคำนวณอัจฉริยะ:</b> เปลี่ยนจำนวนคน ยอดเงินจะถูกหารและปัดเศษ (ห้อง/รถ) ให้อัตโนมัติ!
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Right Column */}
+                            <div className="lg:col-span-8 glass-panel p-4 md:p-8 animate-slide-up hover:border-white/30 transition-all" style={{animationDelay: '0.15s'}}>
+                                <div className="flex justify-between items-center mb-8 pb-4 border-b border-white/10">
+                                    <h2 className="text-2xl font-bold text-popCyan drop-shadow-md"><i className="fa-solid fa-route mr-3"></i> แพลน & ค่าใช้จ่าย</h2>
+                                    <button onClick={()=>toggleModal('plan')} className="bg-gradient-to-r from-popCyan to-blue-500 hover:from-blue-400 hover:to-popCyan text-white px-5 py-2.5 rounded-xl text-sm font-bold shadow-[0_0_20px_rgba(6,182,212,0.4)] transition-all hover:-translate-y-1"><i className="fa-solid fa-plus mr-1"></i> เพิ่มแพลน</button>
+                                </div>
+
+                                <div className="space-y-14">
+                                    {Object.keys(groupedItinerary).map(date => (
+                                        <div key={date}>
+                                            <h3 className="inline-flex items-center bg-white/10 backdrop-blur-xl border border-white/20 text-white px-6 py-2.5 rounded-full text-sm font-bold mb-8 shadow-lg shadow-black/20">
+                                                <i className="fa-regular fa-calendar-star text-popYellow mr-2"></i>{formatDate(date)}
+                                            </h3>
+                                            
+                                            <div className="border-l-[3px] border-white/10 ml-4 md:ml-6 pl-6 md:pl-8 space-y-10 relative">
+                                                {groupedItinerary[date].map(item => (
+                                                    <div key={item.id} className="relative group">
+                                                        <div className="absolute -left-[35px] md:-left-[45px] top-1 w-5 h-5 bg-popPurple rounded-full border-[4px] border-[#0f172a] shadow-[0_0_10px_#8b5cf6] group-hover:scale-125 group-hover:bg-popPink transition-all duration-300"></div>
+                                                        
+                                                        <div className="flex flex-col md:flex-row md:justify-between md:items-start gap-2 mb-2">
+                                                            <div className="pr-6">
+                                                                <span className="font-black text-popYellow mr-3 drop-shadow-md">{item.time}</span>
+                                                                <span className="text-lg font-bold text-white tracking-wide">{item.name}</span>
+                                                            </div>
+                                                            <div className="flex items-center gap-3">
+                                                                {!item.hasOptions && calcCost(item.costs, members.length) > 0 && (
+                                                                    <span className="bg-popCyan/20 text-cyan-200 px-3 py-1 rounded-lg text-sm font-bold border border-popCyan/40 shadow-[0_0_10px_rgba(6,182,212,0.2)]">฿{calcCost(item.costs, members.length).toLocaleString()}</span>
+                                                                )}
+                                                                {item.id.toString().startsWith('custom_') && (
+                                                                    <button onClick={() => removePlan(item.id)} className="text-rose-400 hover:text-rose-300 hover:bg-rose-500/20 p-2 rounded-lg text-sm opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-all"><i className="fa-solid fa-trash"></i></button>
+                                                                )}
+                                                            </div>
+                                                        </div>
+                                                        
+                                                        {item.desc && <p className="text-slate-300 text-sm mb-4 leading-relaxed bg-black/20 border border-white/5 inline-block px-4 py-2 rounded-xl">"{item.desc}"</p>}
+
+                                                        {item.hasOptions && (
+                                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-5">
+                                                                {item.options.map(opt => {
+                                                                    const isSelected = item.selectedOption === opt.id;
+                                                                    const currentCost = calcCost(opt.costs, members.length);
+                                                                    return (
+                                                                        <label key={opt.id} className="option-label">
+                                                                            <input type="radio" name={`choice-${item.id}`} className="hidden option-input" 
+                                                                                   checked={isSelected} onChange={() => handleOptionSelect(item.id, opt.id)} />
+                                                                            <div className="glass-card p-5 transition-all duration-300 flex justify-between items-center h-full group/card hover:bg-white/10 hover:border-popCyan/50 border-white/10 shadow-lg">
+                                                                                <div className="pr-3">
+                                                                                    <div className={`font-bold ${isSelected ? 'text-popCyan' : 'text-slate-200'}`}>{opt.label}</div>
+                                                                                    {opt.desc && <div className="text-xs text-slate-400 mt-1.5 leading-snug">{opt.desc}</div>}
+                                                                                </div>
+                                                                                <div className="text-right flex-shrink-0 flex flex-col items-end justify-center">
+                                                                                    <div className={`font-black ${isSelected ? 'text-white text-lg drop-shadow-[0_0_5px_#06b6d4]' : 'text-slate-400'}`}>
+                                                                                        ฿{currentCost.toLocaleString()}
+                                                                                    </div>
+                                                                                    <i className="fa-solid fa-circle-check text-popCyan text-xl check-icon mt-1"></i>
+                                                                                </div>
+                                                                            </div>
+                                                                        </label>
+                                                                    )
+                                                                })}
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* STICKY TOTAL BAR */}
+                    <div className="sticky-summary animate-slide-up" style={{animationDelay: '0.3s'}}>
+                        <div>
+                            <div className="text-[10px] md:text-xs text-cyan-200 font-bold uppercase tracking-widest mb-1">รวมค่าใช้จ่ายทริปเดือด</div>
+                            <div className="text-2xl md:text-4xl font-black tracking-tighter text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.3)]">฿{totalCost.toLocaleString()}</div>
+                        </div>
+                        <div className="text-right border-l border-white/20 pl-5 md:pl-8">
+                            <div className="text-[10px] md:text-xs text-pink-200 font-bold uppercase tracking-widest mb-1">หารตกคนละ ({members.length} คน)</div>
+                            <div className="text-2xl md:text-4xl font-black text-popPink tracking-tighter drop-shadow-[0_0_15px_rgba(244,63,94,0.4)]">฿{Math.ceil(costPerPerson).toLocaleString()}</div>
+                        </div>
+                    </div>
+
+                    {/* MODAL: Members */}
+                    {modals.members && (
+                        <Modal title="จัดการสมาชิกแก๊ง" onClose={() => toggleModal('members')}>
+                            <form onSubmit={addMember} className="flex gap-2 mb-6">
+                                <input name="name" type="text" placeholder="ชื่ออีตัวดี..." required className="flex-1 px-4 py-3 rounded-xl border border-white/20 focus:outline-none focus:border-popCyan bg-black/40 text-white transition-colors shadow-inner" />
+                                <button type="submit" className="bg-popCyan text-white px-6 py-3 rounded-xl font-bold shadow-[0_0_15px_rgba(6,182,212,0.4)] hover:bg-cyan-400 hover:-translate-y-0.5 transition-all">เพิ่ม</button>
+                            </form>
+                            <div className="flex flex-col gap-3">
+                                {members.map(m => (
+                                    <div key={m.id} className="flex justify-between items-center bg-white/5 p-3 px-5 rounded-xl border border-white/10">
+                                        <span className="font-bold text-white">{m.name}</span>
+                                        <button onClick={() => removeMember(m.id)} className="text-rose-400 hover:text-white hover:bg-popPink p-2 rounded-lg transition-colors shadow-sm"><i className="fa-solid fa-trash"></i></button>
+                                    </div>
+                                ))}
+                            </div>
+                        </Modal>
+                    )}
+                    
+                    {/* MODAL: Plan CRUD */}
+                    {modals.plan && (
+                        <Modal title="เพิ่มแพลนเดือด" onClose={() => toggleModal('plan')}>
+                            <form onSubmit={submitNewPlan} className="flex flex-col gap-4 text-white">
+                                <div className="flex gap-3">
+                                    <div className="flex-1"><label className="text-xs font-bold text-popCyan mb-1 block">วันที่</label><input name="date" type="date" required defaultValue="2026-11-27" className="w-full px-4 py-2.5 rounded-xl border border-white/20 focus:outline-none focus:border-popCyan bg-black/40" /></div>
+                                    <div className="flex-1"><label className="text-xs font-bold text-popCyan mb-1 block">เวลา</label><input name="time" type="time" required className="w-full px-4 py-2.5 rounded-xl border border-white/20 focus:outline-none focus:border-popCyan bg-black/40" /></div>
+                                </div>
+                                <div><input name="name" type="text" placeholder="ชื่อกิจกรรม / สถานที่" required className="w-full px-4 py-3 rounded-xl border border-white/20 focus:outline-none focus:border-popCyan bg-black/40 font-bold shadow-inner" /></div>
+                                <div><input name="desc" type="text" placeholder="หมายเหตุ / คำด่า (ไม่บังคับ)" className="w-full px-4 py-2.5 rounded-xl border border-white/20 focus:outline-none focus:border-popCyan bg-black/40 text-sm" /></div>
+
+                                <div className="bg-white/5 p-1.5 rounded-xl flex gap-1 mt-2">
+                                    <button type="button" onClick={()=>setNewPlanType('single')} className={`flex-1 py-2 rounded-lg text-sm font-bold transition-all ${newPlanType === 'single' ? 'bg-popCyan shadow-[0_0_10px_rgba(6,182,212,0.3)] text-white' : 'text-slate-400 hover:text-white'}`}>ราคาเดียวตายตัว</button>
+                                    <button type="button" onClick={()=>setNewPlanType('multiple')} className={`flex-1 py-2 rounded-lg text-sm font-bold transition-all ${newPlanType === 'multiple' ? 'bg-popPurple shadow-[0_0_10px_rgba(139,92,246,0.3)] text-white' : 'text-slate-400 hover:text-white'}`}>มีหลายตัวเลือก</button>
+                                </div>
+
+                                {newPlanType === 'single' ? (
+                                    <div className="bg-white/5 p-4 rounded-xl border-dashed border-2 border-white/20 mt-2">
+                                        <label className="text-xs font-bold text-popCyan mb-2 block">วิธีคิดเงิน</label>
+                                        <div className="flex gap-2 mb-3">
+                                            <select name="singleUnit" className="w-1/2 px-3 py-2.5 rounded-xl border border-white/20 bg-black/60 text-sm focus:outline-none focus:border-popCyan">
+                                                <option value="perPerson">คูณต่อคน (x สมาชิก)</option>
+                                                <option value="perRoom2">หาร 2 (เช่น ค่าห้อง/มอไซค์)</option>
+                                                <option value="perCar4">หาร 4 (เช่น ค่า Grab/รถ)</option>
+                                                <option value="fixed">เหมาจ่าย (ราคาตายตัว)</option>
+                                            </select>
+                                            <input name="cost" type="number" placeholder="ราคา (บาท)" defaultValue="0" className="w-1/2 px-4 py-2.5 rounded-xl border border-white/20 focus:outline-none focus:border-popCyan bg-black/60" />
+                                        </div>
+                                    </div>
+                                ) : (
+                                    <div className="space-y-4 mt-2 bg-white/5 p-4 rounded-xl border border-white/10">
+                                        <p className="text-xs font-bold text-popPurple">กำหนดตัวเลือก (เพื่อเปรียบเทียบราคา)</p>
+                                        {newOptions.map((opt, idx) => (
+                                            <div key={idx} className="flex gap-2 items-start bg-black/40 p-3.5 rounded-xl border border-white/10 shadow-sm relative group">
+                                                <div className="flex-1 space-y-2.5">
+                                                    <input type="text" placeholder={`ชื่อตัวเลือก (เช่น Plan ${String.fromCharCode(65 + idx)})`} value={opt.label} onChange={(e) => handleOptionChange(idx, 'label', e.target.value)} required className="w-full px-3 py-2 rounded-lg border border-white/20 text-sm focus:outline-none focus:border-popPurple bg-transparent" />
+                                                    <div className="flex gap-2">
+                                                        <select value={opt.unit} onChange={(e) => handleOptionChange(idx, 'unit', e.target.value)} className="w-1/3 px-2 py-2 rounded-lg border border-white/20 text-xs focus:outline-none focus:border-popPurple bg-slate-800">
+                                                            <option value="perPerson">x ต่อคน</option>
+                                                            <option value="perRoom2">หาร 2</option>
+                                                            <option value="perCar4">หาร 4</option>
+                                                            <option value="fixed">เหมาจ่าย</option>
+                                                        </select>
+                                                        <input type="number" placeholder="ราคา" value={opt.cost || ''} onChange={(e) => handleOptionChange(idx, 'cost', e.target.value)} className="w-1/3 px-3 py-2 rounded-lg border border-white/20 text-sm focus:outline-none focus:border-popPurple bg-transparent" />
+                                                        <input type="text" placeholder="หมายเหตุ" value={opt.desc} onChange={(e) => handleOptionChange(idx, 'desc', e.target.value)} className="flex-1 px-3 py-2 rounded-lg border border-white/20 text-sm focus:outline-none focus:border-popPurple bg-transparent" />
+                                                    </div>
+                                                </div>
+                                                {newOptions.length > 1 && (
+                                                    <button type="button" onClick={() => removeOptionField(idx)} className="text-rose-400 hover:text-white hover:bg-popPink p-2 rounded-lg transition-colors"><i className="fa-solid fa-times"></i></button>
+                                                )}
+                                            </div>
+                                        ))}
+                                        <button type="button" onClick={handleAddOptionField} className="w-full py-2.5 mt-2 border-2 border-dashed border-popPurple/50 text-popPurple rounded-xl text-sm font-bold hover:bg-popPurple/20 transition-colors"><i className="fa-solid fa-plus mr-1"></i> เพิ่มตัวเลือกย่อย</button>
+                                    </div>
+                                )}
+
+                                <button type="submit" className="bg-gradient-to-r from-popCyan to-blue-500 text-white px-6 py-3.5 rounded-xl font-black mt-4 shadow-[0_0_20px_rgba(6,182,212,0.3)] hover:shadow-[0_0_30px_rgba(6,182,212,0.5)] hover:-translate-y-0.5 transition-all text-lg uppercase tracking-wide">บันทึกข้อมูลเดือดๆ</button>
+                            </form>
+                        </Modal>
+                    )}
+                </div>
+            );
+        };
+        const root = ReactDOM.createRoot(document.getElementById('root')); root.render(<App />);
+    </script>
+</body>
+</html>
